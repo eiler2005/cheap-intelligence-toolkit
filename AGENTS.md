@@ -17,6 +17,9 @@ its own canonical address in the first line. Prefer the site when the two disagr
   material: for each chapter, which worksheets it promises. Use it to answer "what belongs to
   chapter N".
 - `docs/MAP.md` — the same map for a human.
+- `method/slovar.md` — the glossary. Output, outcome, transferability, exposure, harness, cognitive
+  debt and the rest carry specific meanings in these books. Use these, not generic ones.
+- `method/dlya-assistenta.md` — the rules below, in full, plus what the reader should ask you for.
 
 ## What each folder is
 

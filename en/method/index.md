@@ -18,6 +18,10 @@ The book's main idea is simple: **AI makes output cheap, so value moves to ownin
 
 **question → diagnosis → artifact → action → later check.**
 
+On the same shelf: the **[Practicum glossary](slovar.md)** — what the words in the worksheets mean —
+and **[working with your AI assistant](dlya-assistenta.md)**: what to ask it for, what not to expect,
+and the rules to hand the assistant itself if you work through the Practicum together.
+
 You do not just read and feel inspired. You fill in a worksheet, get a conclusion, make one move, and check it against your own measure later.
 
 ## Book 1: The Human Edge
