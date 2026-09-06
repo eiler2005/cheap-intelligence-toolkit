@@ -80,4 +80,4 @@ I check every quote against the contract and take responsibility for the decisio
 
 Your list of skills becomes a portable part of your harness. When you start an agent, it can load the right skill for the task. The irritation of explaining the same thing again is useful evidence. It points to the next skill you should write.
 
-> Related: [Personal Harness Builder](personal-harness-builder.md) | [Skill banks](https://cheap-intelligence.vercel.app/en/watch/skill-banks) | [Prompts: method and verification](../prompts/index.md) | [Profession library](https://cheap-intelligence.vercel.app/en/applications/_index).
+> Related: [Personal Harness Builder](personal-harness-builder.md) | [Skill banks](https://cheap-intelligence.vercel.app/en/watch/skill-banks) | [Prompts: method and verification](../prompts/index.md) | [Profession library](../applications/_index.md).

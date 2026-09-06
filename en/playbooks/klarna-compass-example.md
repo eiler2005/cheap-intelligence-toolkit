@@ -69,7 +69,7 @@ Against the [Agent Contract](agent-contract.md) and [evaluation set](eval-set-bu
 2. **Name the stop threshold before launch, not after a press story.** One number and one action create a line in the
    [Agent Contract](agent-contract.md) that costs nothing and can protect your reputation.
 3. **Passing the PEOPLE gate costs less than skipping it.** Moving a team into audit and knowledge-base roles,
-   as in [Sergei's case](https://cheap-intelligence.vercel.app/en/cases/persona-rukovoditel-podderzhki), costs less than a public reversal and a second hiring round.
+   as in [Sergei's case](../cases/persona-rukovoditel-podderzhki.md), costs less than a public reversal and a second hiring round.
 
 ---
 

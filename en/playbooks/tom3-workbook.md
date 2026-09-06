@@ -77,7 +77,7 @@ differently. The [trust repair protocol](trust-repair-protocol.md) gives the ful
 
 
 For a fillable version that you can export, [open the browser-based Trust Compass](../skills/trust-compass/index.md).
-See a deliberately imperfect first pass by a [composite family and independent professional](https://cheap-intelligence.vercel.app/en/cases/persona-family-trust).
+See a deliberately imperfect first pass by a [composite family and independent professional](../cases/persona-family-trust.md).
 
 > **Review prompt.** "Here is my trust protocol. Find one situation with a high cost of error where I
 > still have not named a second channel or independent support. Do not suggest services or judge whether

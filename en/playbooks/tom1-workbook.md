@@ -26,7 +26,7 @@ worksheet. At the end, you will have a 90-day plan built from your own diagnosis
 to AI, what you keep under human control, and which next level you plan to take on.
 
 There are two doors into the Practicum. Use this workbook to follow the book, or [choose your
-profession](https://cheap-intelligence.vercel.app/en/applications/_index) if you want to start with "How will AI change my work?" You
+profession](../applications/_index.md) if you want to start with "How will AI change my work?" You
 can use both.
 
 ---
@@ -60,7 +60,7 @@ Worksheet: [ladder-self-diagnosis.md](ladder-self-diagnosis.md).
 
 Worksheets: [usefulness-levels-self-check.md](usefulness-levels-self-check.md) ·
 [plus-one-level-plan.md](plus-one-level-plan.md) ·
-the ladder in the language of your own work is in [your profession card](https://cheap-intelligence.vercel.app/en/applications/_index).
+the ladder in the language of your own work is in [your profession card](../applications/_index.md).
 
 - **My default level (0 to 5):** `____` · **candidate task for a +1 move:** `______________`
 
@@ -170,4 +170,4 @@ check your own metric. Did it move? This closes Volume 1, from value levers to a
 which covers teams, business, and the wider world, has its own
 [Volume 2 Workbook](tom2-workbook.md).
 
-To see a completed workbook, open the [end-to-end marketer example](https://cheap-intelligence.vercel.app/en/cases/persona-marketolog).
+To see a completed workbook, open the [end-to-end marketer example](../cases/persona-marketolog.md).

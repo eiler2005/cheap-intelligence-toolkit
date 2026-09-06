@@ -5,7 +5,7 @@
 
 # Prompts: explore your profession with AI
 
-> Could not find your role in the [catalog](https://cheap-intelligence.vercel.app/en/applications/_index), or want to go deeper? These
+> Could not find your role in the [catalog](../applications/_index.md), or want to go deeper? These
 > prompts help you break down your own work using the book's method. Copy them, add your details, and
 > check the answers. **Date: 2026-06.**
 >

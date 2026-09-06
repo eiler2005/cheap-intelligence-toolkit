@@ -89,4 +89,4 @@ description: Разбирает входящий договор и выдаёт 
 должен быть скилл.
 
 > Связь: [Личная система](personal-harness-builder.md) · [Банки скиллов](https://cheap-intelligence.vercel.app/watch/skill-banks) ·
-> [Промпты: метод + проверка](../prompts/index.md) · [Банк профессий](https://cheap-intelligence.vercel.app/applications/_index).
+> [Промпты: метод + проверка](../prompts/index.md) · [Банк профессий](../applications/_index.md).

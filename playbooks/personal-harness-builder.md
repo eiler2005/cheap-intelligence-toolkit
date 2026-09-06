@@ -195,6 +195,6 @@
 
 ## Дальше
 
-Если нужны примеры уровней харнесса и skills — [Examples by Level](https://cheap-intelligence.vercel.app/harness-examples/examples-by-level).
-Если нужна карта инструментов по слоям — [Tools Map by Layer](https://cheap-intelligence.vercel.app/tools-map/tools-map-by-layer).
+Если нужны примеры уровней харнесса и skills — [Examples by Level](../harness-examples/examples-by-level.md).
+Если нужна карта инструментов по слоям — [Tools Map by Layer](../tools-map/tools-map-by-layer.md).
 Для общего обзора главы и навигации — [Глава 6. Companion](https://cheap-intelligence.vercel.app/chapters/06-chelovek-kak-sistema).

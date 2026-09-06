@@ -13,5 +13,5 @@
 3. **[Безопасность](https://cheap-intelligence.vercel.app/start/03-bezopasnost)** — что нельзя отправлять в чат и как не попасться на уверенную ошибку.
 4. **[Авторский стек](https://cheap-intelligence.vercel.app/start/04-avtorskiy-stek)** — чем пользуется сам автор (по желанию; для упражнений не обязательно).
 
-Дальше — выбирайте свою дверь: [как ИИ меняет мою работу](https://cheap-intelligence.vercel.app/applications/_index) или
+Дальше — выбирайте свою дверь: [как ИИ меняет мою работу](../applications/_index.md) или
 [пройти книгу по шагам](../playbooks/tom1-workbook.md).

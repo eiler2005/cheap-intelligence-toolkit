@@ -129,5 +129,5 @@
 [вставьте таблицу]
 ```
 
-Как выглядит заполненный маршрут — [сквозной пример: владелец МСП](https://cheap-intelligence.vercel.app/cases/persona-vladelec-msp)
-и [руководитель поддержки](https://cheap-intelligence.vercel.app/cases/persona-rukovoditel-podderzhki).
+Как выглядит заполненный маршрут — [сквозной пример: владелец МСП](../cases/persona-vladelec-msp.md)
+и [руководитель поддержки](../cases/persona-rukovoditel-podderzhki.md).

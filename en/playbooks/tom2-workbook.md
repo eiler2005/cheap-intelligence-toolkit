@@ -148,5 +148,5 @@ Do not suggest "put AI everywhere." Ask three questions that will help me improv
 [paste the table]
 ```
 
-See a completed route in the [small-business owner example](https://cheap-intelligence.vercel.app/en/cases/persona-vladelec-msp) and the
-[support manager example](https://cheap-intelligence.vercel.app/en/cases/persona-rukovoditel-podderzhki).
+See a completed route in the [small-business owner example](../cases/persona-vladelec-msp.md) and the
+[support manager example](../cases/persona-rukovoditel-podderzhki.md).

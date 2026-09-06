@@ -17,7 +17,7 @@ Look for the "Chat version if you cannot use the browser tool" section on its pa
 
 Each tool is one file. It calculates on your device and sends no data anywhere. Every tool continues
 an exercise from the book. You can collect results in [My Profile](my-profile/index.md), including
-completed work, your [maturity route](https://cheap-intelligence.vercel.app/en/tracks) stage, and the next step. This data also stays
+completed work, your [maturity route](../tracks/index.md) stage, and the next step. This data also stays
 in your browser.
 
 <div class="grid cards" markdown>

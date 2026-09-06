@@ -96,5 +96,5 @@ The agent is ready to work on its assigned area only when every item is true:
 Next: if you have not completed the contract, open [Agent Contract](agent-contract.md). If you selected
 the process by instinct, return to [process scoring](process-scoring.md). After the set passes, use
 shadow mode instead of moving straight to production. See a live 40-request set in
-[Sergey, support team lead](https://cheap-intelligence.vercel.app/en/cases/persona-rukovoditel-podderzhki).
+[Sergey, support team lead](../cases/persona-rukovoditel-podderzhki.md).
 Back: [Volume 2 Workbook](tom2-workbook.md).

@@ -164,8 +164,8 @@ If you completed the Task-to-Outcome Map first, look at question 4, "Where is a 
 
 ## Next
 
-For examples of harness levels and skills, see [Examples by Level](https://cheap-intelligence.vercel.app/en/harness-examples/examples-by-level).
+For examples of harness levels and skills, see [Examples by Level](../harness-examples/examples-by-level.md).
 
-For a map of tools by layer, see [Tools Map by Layer](https://cheap-intelligence.vercel.app/en/tools-map/tools-map-by-layer).
+For a map of tools by layer, see [Tools Map by Layer](../tools-map/tools-map-by-layer.md).
 
 For the chapter overview and navigation, see [Chapter 6 Companion](https://cheap-intelligence.vercel.app/en/chapters/06-chelovek-kak-sistema).

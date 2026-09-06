@@ -12,7 +12,7 @@ description: A local-first record of completed checks, your maturity stage, one 
 # My adaptation profile
 
 > A local-first Practicum tool that shows completed diagnostics, your stage on the
-> [maturity route](https://cheap-intelligence.vercel.app/en/tracks), one next step, and a separate trust layer.
+> [maturity route](../../tracks/index.md), one next step, and a separate trust layer.
 
 <a class="md-button md-button--primary" href="tool.html">Open My Profile →</a>
 
@@ -46,4 +46,4 @@ the "My one-page result" section of the [Volume 1 Workbook](../../playbooks/tom1
 
 ---
 
-Full route: [maturity stages](https://cheap-intelligence.vercel.app/en/tracks) · all tools: [catalog](../../docs/MAP.md).
+Full route: [maturity stages](../../tracks/index.md) · all tools: [catalog](../../docs/MAP.md).

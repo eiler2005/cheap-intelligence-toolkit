@@ -136,4 +136,4 @@ Compare two AI answers about you. A difference is not a verdict. It points to a 
 > The compass makes deception more expensive. It does not make anyone invulnerable.
 
 If you want one final artifact instead of notes from each section, complete the [one-page trust protocol](tom3-workbook.md#my-trust-protocol-on-one-page).
-For a completed composite example, see [Marina and her family](https://cheap-intelligence.vercel.app/en/cases/persona-family-trust).
+For a completed composite example, see [Marina and her family](../cases/persona-family-trust.md).

@@ -19,7 +19,7 @@ There are three kinds of tool:
 - **Browser tool:** open it in your browser and work through it. Your data does not leave the browser. Each has a chat version if you cannot use the browser tool.
 - **Prompt or skill:** a ready-made instruction you give to your own AI assistant.
 
-The routes that connect them are the [Book 1 Workbook](../playbooks/tom1-workbook.md), [Book 2 Workbook](../playbooks/tom2-workbook.md), [Book 3 Workbook](../playbooks/tom3-workbook.md), and the [method map](https://cheap-intelligence.vercel.app/en/method).
+The routes that connect them are the [Book 1 Workbook](../playbooks/tom1-workbook.md), [Book 2 Workbook](../playbooks/tom2-workbook.md), [Book 3 Workbook](../playbooks/tom3-workbook.md), and the [method map](../method/index.md).
 
 To work inside your own assistant rather than on this site, [take a book's materials as one
 file](HOW-TO-USE.md) and load it into a ChatGPT or Claude project, NotebookLM, or anything else
@@ -69,7 +69,7 @@ For a filled example, see [IKEA through the Change Compass](../playbooks/ikea-co
 | How do I become easier to check? | [Trust footprint map](../playbooks/trust-footprint-map.md) · [honest AI policy](../playbooks/honest-ai-policy.md) | n/a |
 | How do I make a rule for home and work? | [Trust Compass](../playbooks/trust-compass.md) · [one-page result](../playbooks/tom3-workbook.md#my-trust-protocol-on-one-page) | [Open](../skills/trust-compass/index.md) |
 
-For a filled example, see [Marina and her family](https://cheap-intelligence.vercel.app/en/cases/persona-family-trust).
+For a filled example, see [Marina and her family](../cases/persona-family-trust.md).
 
 ## Prompts and skills
 

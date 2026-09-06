@@ -14,7 +14,7 @@
 - **💬 Промпт / скилл** — готовая инструкция, которую вы отдаёте своему ИИ-ассистенту.
 
 Сквозные маршруты, которые связывают всё это в путь: [Тетрадь Тома 1](../playbooks/tom1-workbook.md) ·
-[Тетрадь Тома 2](../playbooks/tom2-workbook.md) · [Тетрадь Тома 3](../playbooks/tom3-workbook.md) · [карта метода](https://cheap-intelligence.vercel.app/method).
+[Тетрадь Тома 2](../playbooks/tom2-workbook.md) · [Тетрадь Тома 3](../playbooks/tom3-workbook.md) · [карта метода](../method/index.md).
 
 Хотите работать не на сайте, а в своём ИИ-ассистенте — [заберите материалы тома одним
 файлом](HOW-TO-USE.md) и положите в проект ChatGPT, Claude, Алисы или GigaChat.
@@ -66,7 +66,7 @@
 | Как стать тем, кого проще проверить? | [Карта следа доверия](../playbooks/trust-footprint-map.md) · [честная политика ИИ](../playbooks/honest-ai-policy.md) | — |
 | Как собрать правило дома и на работе? | [Компас доверия](../playbooks/trust-compass.md) · [итог одной страницей](../playbooks/tom3-workbook.md#мой-протокол-доверия--итог-одной-страницей) | ⚡ [открыть](../skills/trust-compass/index.md) |
 
-Заполненный пример: [Марина и её семья](https://cheap-intelligence.vercel.app/cases/persona-family-trust).
+Заполненный пример: [Марина и её семья](../cases/persona-family-trust.md).
 
 ## Промпты и скиллы
 

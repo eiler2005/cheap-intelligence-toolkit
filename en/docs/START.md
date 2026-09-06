@@ -21,4 +21,4 @@ Four short steps can get you started today:
 3. **[Safety](https://cheap-intelligence.vercel.app/en/start/03-bezopasnost)**. What you should not put in a chat, and how to spot a confident mistake.
 4. **[The author's setup](https://cheap-intelligence.vercel.app/en/start/04-avtorskiy-stek)**. What the author uses. It is optional, not a requirement for the exercises.
 
-Then choose your route: [how AI changes my work](https://cheap-intelligence.vercel.app/en/applications/_index), or [work through the book step by step](../playbooks/tom1-workbook.md).
+Then choose your route: [how AI changes my work](../applications/_index.md), or [work through the book step by step](../playbooks/tom1-workbook.md).
