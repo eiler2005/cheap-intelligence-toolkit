@@ -25,6 +25,7 @@ from whatever it absorbed on the open web.
 | **[Book 2 — *Business in the Age of AI Agents*](/en/pack/tom2.md)** | the workbook plus 25 materials: process maturity, the agent contract, change gates, the small-business staff map, visibility to an agent buyer | ~97 KB |
 | **[Book 3 — *The Economics of Trust*](/en/pack/tom3.md)** | the workbook plus 11 materials: the trust compass, the perimeter, chain of custody, the evidence package, an honest AI policy | ~68 KB |
 | **[All three books](/en/pack/all.md)** | everything together | ~250 KB |
+| **[Skills only](/en/pack/skills.md)** | six ready instructions for an AI assistant, without the worksheets — **fits in a message box** when you cannot attach a file | ~18 KB |
 
 The file opens in the browser. To keep it: right-click → Save as… (on a phone, Share → Save to Files).
 
