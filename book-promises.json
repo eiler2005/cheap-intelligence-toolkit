@@ -1,0 +1,647 @@
+{
+  "_comment": "Контракт «глава → материал» Практикума. Каждое названное в главе обещание имеет адрес на https://cheap-intelligence.vercel.app. Сгенерировано из companion/book-promises.json; проверяется гейтом check-book-practicum-links.",
+  "_updated": "2026-08-12",
+  "excluded": [
+    {
+      "chapter": "t3-01-pomoi-v2",
+      "reason": "Исторический пилот первой главы Тома 3; в печатную сборку не входит (publishing/tom3-print-structure.md)."
+    }
+  ],
+  "no_practicum": [
+    {
+      "chapter": "10-kto-ya-kogda-ii-delaet-moyu-rabotu",
+      "reason": "Глава-рефлексия: рабочего артефакта нет, раздел намеренно не делали."
+    },
+    {
+      "chapter": "t3-11-premiya-za-podlinnost",
+      "reason": "Глава объясняет, почему проверяемое дорожает. Практику даёт глава 12; зафиксировано в tom3-chapter-index."
+    },
+    {
+      "chapter": "t3-13b-epilog-rukopozhatie",
+      "reason": "Эпилог: отдельного материала и QR намеренно нет."
+    }
+  ],
+  "chapters": [
+    {
+      "chapter": "01-kak-my-syuda-prishli",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "обновляемые ссылки по агентам",
+          "page": "watch/agents-now.md"
+        },
+        {
+          "name": "стоимость модельной работы",
+          "page": "watch/tools-map.md"
+        }
+      ]
+    },
+    {
+      "chapter": "02-novaya-cena-intellekta",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "рабочий фильтр трёх рычагов ценности",
+          "page": "playbooks/value-levers-filter.md"
+        },
+        {
+          "name": "таблица «что дешевеет / что становится преимуществом»",
+          "page": "playbooks/value-levers-filter.md"
+        },
+        {
+          "name": "связка с инвентаризацией недели",
+          "page": "playbooks/week-inventory.md"
+        }
+      ]
+    },
+    {
+      "chapter": "03-professii-raspadayutsya-na-zadachi",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "раскладки задач по профессиям",
+          "page": "applications/_index.md"
+        },
+        {
+          "name": "рабочий лист «Инвентаризация недели»",
+          "page": "playbooks/week-inventory.md"
+        }
+      ]
+    },
+    {
+      "chapter": "04-lestnitsa-rushitsya-vhod-i-seredina",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "рабочий лист «Самодиагностика лестницы»",
+          "page": "playbooks/ladder-self-diagnosis.md"
+        },
+        {
+          "name": "чек-лист «Аудит ученичества в команде: 3C»",
+          "page": "playbooks/apprenticeship-audit-3c.md"
+        },
+        {
+          "name": "страница Ladder Watch",
+          "page": "watch/ladder-watch.md"
+        }
+      ]
+    },
+    {
+      "chapter": "05-pyat-urovney-novoy-poleznosti",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "рабочая тетрадь «Мой уровень полезности»",
+          "page": "playbooks/usefulness-levels-self-check.md"
+        },
+        {
+          "name": "шаблон «Один ход на +1 уровень»",
+          "page": "playbooks/plus-one-level-plan.md"
+        },
+        {
+          "name": "лестницы уровней для типовых профессий",
+          "heading": "Лестница уровней в этой роли",
+          "pages": [
+            "applications/lawyer.md",
+            "applications/buhgalter.md",
+            "applications/finanalitik.md",
+            "applications/marketolog.md",
+            "applications/dizayner.md",
+            "applications/analitik.md",
+            "applications/razrabotchik.md",
+            "applications/sales-b2b.md",
+            "applications/podderzhka.md",
+            "applications/hr.md",
+            "applications/product-pm.md",
+            "applications/uchitel.md",
+            "applications/vrach.md"
+          ]
+        },
+        {
+          "name": "страница Levels Watch",
+          "page": "watch/levels-watch.md"
+        }
+      ]
+    },
+    {
+      "chapter": "06-chelovek-kak-sistema",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "Task-to-Outcome Map",
+          "page": "playbooks/task-to-outcome-map.md"
+        },
+        {
+          "name": "Personal Harness Builder",
+          "page": "playbooks/personal-harness-builder.md"
+        },
+        {
+          "name": "примеры навыков",
+          "page": "playbooks/make-it-a-skill.md"
+        },
+        {
+          "name": "карта инструментов по слоям",
+          "page": "tools-map/tools-map-by-layer.md"
+        }
+      ]
+    },
+    {
+      "chapter": "07-navyki-kotorye-dorozhayut",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "рабочий лист «Аудит пяти дефицитов»",
+          "page": "playbooks/five-deficits-audit.md"
+        },
+        {
+          "name": "страница Skills Watch",
+          "page": "watch/skills-that-pay.md"
+        }
+      ]
+    },
+    {
+      "chapter": "08-kognitivnyy-dolg",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "чек-лист когнитивного долга",
+          "page": "playbooks/cognitive-debt-checklist.md"
+        },
+        {
+          "name": "самодиагностика «киборг / центавр / самоавтоматизатор»",
+          "page": "playbooks/ai-mode-audit.md"
+        },
+        {
+          "name": "банк формулировок «трение вместо готового ответа»",
+          "page": "playbooks/training-not-answers.md"
+        }
+      ]
+    },
+    {
+      "chapter": "09-lichnyy-audit-professii",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "интегральная карта аудита профессии",
+          "page": "playbooks/profession-audit-integrated.md"
+        },
+        {
+          "name": "разборы-образцы по профессиям",
+          "page": "cases/persona-marketolog.md"
+        }
+      ]
+    },
+    {
+      "chapter": "11-pervye-90-dney-lichnyy-plan",
+      "volume": 1,
+      "promises": [
+        {
+          "name": "шаблон личного плана на 90 дней",
+          "page": "playbooks/personal-90-day-plan.md"
+        },
+        {
+          "name": "примеры заполнения по профессиям",
+          "page": "cases/persona-marketolog.md"
+        },
+        {
+          "name": "живая страница «что осваивать сейчас»",
+          "page": "watch/skills-now.md"
+        },
+        {
+          "name": "Канвас отчуждаемости",
+          "page": "playbooks/weak-multiplier-canvas.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-01-ii-ne-plagin-a-rekonstrukciya",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Тест зрелости процесса",
+          "page": "playbooks/ai-native-maturity-check.md"
+        },
+        {
+          "name": "Лестница уровней AI-native",
+          "page": "playbooks/ai-native-maturity-check.md",
+          "heading": "C. Уровень 0–5"
+        },
+        {
+          "name": "Промпт «Переизобрести компанию с нуля»",
+          "page": "prompts/zero-human-company-reframe.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-02-ot-output-k-outcome",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Матрица «Что отдать ИИ, а что оставить человеку»",
+          "page": "playbooks/human-review-matrix.md"
+        },
+        {
+          "name": "Живая страница «Граница автономности»",
+          "page": "watch/output-to-outcome-watch.md"
+        },
+        {
+          "name": "Поля для метрики потока",
+          "page": "playbooks/human-review-matrix.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-03-komanda-s-agentami",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Шаблон контракта агента",
+          "page": "playbooks/agent-contract.md"
+        },
+        {
+          "name": "Примеры контрактов",
+          "page": "playbooks/agent-contract.md",
+          "heading": "Пример 1 — агент поддержки первой линии"
+        },
+        {
+          "name": "Стартер-кит «team-brain»",
+          "page": "playbooks/team-brain-starter.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-04-kompaniya-iz-odnogo",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Промпт «Переизобрести компанию с нуля»",
+          "page": "prompts/zero-human-company-reframe.md"
+        },
+        {
+          "name": "Чек-лист устойчивой автоматизации",
+          "page": "playbooks/resilient-automation.md"
+        },
+        {
+          "name": "Живая страница «Компания без людей»",
+          "page": "watch/zero-human-company.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-05-msp-ii-kak-deshevyy-shtab",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Карта «штаб МСП на агентах»",
+          "page": "playbooks/smb-staff-map.md"
+        },
+        {
+          "name": "Чек-лист «С чего начать»",
+          "page": "playbooks/smb-start-checklist.md"
+        },
+        {
+          "name": "Связка с устойчивой автоматизацией",
+          "page": "playbooks/resilient-automation.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-06-kogda-klient-ne-chelovek",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Чек-лист «Виден ли я агенту»",
+          "page": "skills/visible-to-agent/index.md"
+        },
+        {
+          "name": "Рабочий лист для проверки видимости в ИИ-поиске",
+          "page": "playbooks/geo-ai-search-kit.md"
+        },
+        {
+          "name": "Живые страницы про агентные браузеры и протоколы",
+          "pages": [
+            "watch/agentic-browsers.md",
+            "watch/agent-protocols.md"
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": "t2-07-deti",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Гид «чему учить, когда ответы дешевеют»",
+          "page": "playbooks/kids-ai-skills-guide.md"
+        },
+        {
+          "name": "Семейный воркшит «Создавай трение»",
+          "page": "playbooks/family-3c-audit.md"
+        },
+        {
+          "name": "Prompt «ИИ-репетитор в режиме тренажёра»",
+          "page": "playbooks/ai-tutor-training-mode.md"
+        },
+        {
+          "name": "Живая страница про детские ИИ-навыки",
+          "page": "watch/kids-skills.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-08-novaya-ekonomika-poleznosti",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Живая страница «Монитор рынка труда»",
+          "page": "watch/labor-market.md"
+        },
+        {
+          "name": "Рабочий лист «Своя лестница»",
+          "page": "playbooks/own-ladder.md"
+        },
+        {
+          "name": "Чек-лист «Кто владеет вашей лестницей»",
+          "page": "playbooks/ladder-ownership-audit.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-09-fizicheskiy-ii-i-relsy",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Живая страница «Карта AI-рельсов»",
+          "page": "watch/physical-ai-rails.md"
+        },
+        {
+          "name": "Чек-лист «Карта вашей платформенной ренты»",
+          "page": "playbooks/platform-rent-map.md"
+        },
+        {
+          "name": "Рабочий лист «Ход вверх по лестнице рельсов»",
+          "page": "playbooks/platform-rent-map.md",
+          "heading": "Шаг 2. Определите свою позицию на рельсах"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-10-budushchee-2030-chetyre-scenariya",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Рабочий лист «Какой мир вы строите»",
+          "page": "playbooks/which-world.md"
+        },
+        {
+          "name": "Живая страница «Панель ранних индикаторов»",
+          "page": "watch/agi-signals.md"
+        },
+        {
+          "name": "Рабочий лист «Ходы без сожалений»",
+          "page": "playbooks/no-regret-moves.md"
+        },
+        {
+          "name": "Рабочий лист «Проверка AGI-заявлений»",
+          "page": "playbooks/agi-claim-check.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t2-11-kompas-izmeneniy",
+      "volume": 2,
+      "promises": [
+        {
+          "name": "Рабочий лист «Скоринг процессов»",
+          "page": "playbooks/process-scoring.md"
+        },
+        {
+          "name": "Разбор IKEA",
+          "page": "playbooks/ikea-compass-example.md"
+        },
+        {
+          "name": "Лист гейтов",
+          "page": "playbooks/change-gates.md"
+        },
+        {
+          "name": "Чек-лист «Обучение без галочки»",
+          "page": "playbooks/training-in-the-loop.md"
+        },
+        {
+          "name": "Шаблоны из глав тома",
+          "page": "playbooks/tom2-workbook.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-01-ubeditelno-ne-znachit-podlinno",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "минимальный пакет доверия",
+          "page": "playbooks/tom3-workbook.md",
+          "heading": "Минимальный пакет доверия"
+        },
+        {
+          "name": "рабочая тетрадь Тома 3",
+          "page": "playbooks/tom3-workbook.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-02-poddelnoe-prisutstvie",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "семейный протокол доверия",
+          "page": "playbooks/family-trust-protocol.md"
+        },
+        {
+          "name": "личный периметр доверия",
+          "page": "playbooks/trust-perimeter.md",
+          "heading": "1. Второй канал для дорогих распоряжений (работа/бизнес)"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-03-obratnyy-test-tyuringa",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "след работы «до обвинения»",
+          "page": "playbooks/trust-perimeter.md",
+          "heading": "2. След работы «до обвинения»"
+        },
+        {
+          "name": "два протокола обвинения",
+          "page": "playbooks/trust-perimeter.md",
+          "heading": "Если обвинили вас"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-04-sinteticheskaya-reputatsiya",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "первые 24 часа при атаке отзывами",
+          "page": "playbooks/trust-perimeter.md",
+          "heading": "3. Атака отзывами: первые 24 часа (малый бизнес)"
+        },
+        {
+          "name": "карта следа доверия",
+          "page": "playbooks/trust-footprint-map.md"
+        },
+        {
+          "name": "живая карта жалоб",
+          "page": "watch/trust-regulation.md",
+          "heading": "Куда жаловаться на фейковые отзывы и вымогательство"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-05-nalog-nedoveriya",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "личный счёт налога недоверия",
+          "page": "playbooks/trust-perimeter.md",
+          "heading": "4. Личный счёт «налога недоверия» (по желанию, за неделю)"
+        },
+        {
+          "name": "зеркальный аудит",
+          "page": "playbooks/trust-perimeter.md",
+          "heading": "Зеркало: во что вы обходитесь другим"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-06-proveryaemost-vmesto-prozrachnosti",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "таблица «что подтверждает свидетельство»",
+          "page": "playbooks/evidence-package.md",
+          "heading": "Что свидетельство подтверждает на самом деле"
+        },
+        {
+          "name": "матрица достаточности",
+          "page": "playbooks/evidence-package.md",
+          "heading": "Сколько нужно при разной цене ошибки"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-07-infrastruktura-doveriya",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "маршрут «проверить чужой файл»",
+          "page": "watch/trust-regulation.md",
+          "heading": "Маршрут: проверить чужой файл"
+        },
+        {
+          "name": "обратный маршрут: как подписать своё",
+          "page": "watch/trust-regulation.md",
+          "heading": "Маршрут: подписать своё"
+        },
+        {
+          "name": "личный провенанс за один вечер",
+          "page": "playbooks/trust-footprint-map.md",
+          "heading": "Личный провенанс за один вечер"
+        },
+        {
+          "name": "живая карта законов о маркировке ИИ-контента",
+          "page": "watch/trust-regulation.md",
+          "heading": "Юрисдикции: как устроен текущий ответ"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-08-dengi-agentov",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "таблица лимита и мандата",
+          "page": "playbooks/family-trust-protocol.md",
+          "heading": "5. Свои ИИ-агенты и семейные деньги"
+        },
+        {
+          "name": "живая карта «кто отвечает за ошибку агента»",
+          "page": "watch/trust-regulation.md",
+          "heading": "Кто отвечает за ошибку агента"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-09-doverie-vnutri",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "реестр ботов компании",
+          "page": "playbooks/trust-inside-team.md"
+        },
+        {
+          "name": "протокол найма",
+          "page": "playbooks/trust-inside-team.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-10-kto-reshaet-chemu-verit",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "цепочка хранения: первые сутки с важным файлом",
+          "page": "playbooks/chain-of-custody.md"
+        },
+        {
+          "name": "живая карта «кто признаёт цифровое доказательство»",
+          "page": "watch/trust-regulation.md",
+          "heading": "Три двери: что у вас спросят"
+        },
+        {
+          "name": "шаблон «пакет доказательств до спора»",
+          "page": "playbooks/evidence-package.md",
+          "heading": "3. Выберите свою ситуацию"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-12-kapital-podlinnosti",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "карта следа доверия",
+          "page": "playbooks/trust-footprint-map.md"
+        },
+        {
+          "name": "честная политика ИИ",
+          "page": "playbooks/honest-ai-policy.md"
+        },
+        {
+          "name": "рабочий лист видимости в ИИ-поиске",
+          "page": "playbooks/geo-ai-search-kit.md"
+        }
+      ]
+    },
+    {
+      "chapter": "t3-13-kompas-doveriya",
+      "volume": 3,
+      "promises": [
+        {
+          "name": "компас доверия",
+          "page": "playbooks/trust-compass.md"
+        },
+        {
+          "name": "семейный протокол",
+          "page": "playbooks/family-trust-protocol.md"
+        },
+        {
+          "name": "карта следа доверия",
+          "page": "playbooks/trust-footprint-map.md"
+        }
+      ]
+    }
+  ]
+}

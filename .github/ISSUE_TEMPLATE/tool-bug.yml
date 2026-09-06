@@ -1,0 +1,35 @@
+name: Сломался браузерный инструмент
+description: tool.html не открывается, не считает или считает неправильно
+labels: ["инструмент"]
+body:
+  - type: input
+    id: tool
+    attributes:
+      label: Какой инструмент
+      placeholder: skills/week-inventory/tool.html
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: Что происходит
+      description: Что вы сделали, что ожидали увидеть, что увидели.
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Браузер и устройство
+      placeholder: Safari на iPhone / Chrome на Windows
+  - type: dropdown
+    id: how
+    attributes:
+      label: Как открывали
+      options: ["На сайте", "Скачанный файл с диска", "Из этого репозитория"]
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Проверка перед отправкой
+      options:
+        - label: На скриншотах и в тексте нет моих реальных данных
+          required: true

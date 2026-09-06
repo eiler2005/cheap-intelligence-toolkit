@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week inventory - Practicum "When Intelligence Became Cheap"</title>
+
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;font-size:.9rem}
+  th,td{padding:.5rem .55rem;border-top:1px solid var(--border);text-align:left;vertical-align:middle}
+  thead th{background:var(--muted-bg);border-top:none;font-size:.78rem;color:var(--muted);font-weight:600}
+  td input[type=text]{width:100%;border:1px solid var(--border);border-radius:.45rem;padding:.4rem .5rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  td input[type=number]{width:4.2rem;border:1px solid var(--border);border-radius:.45rem;padding:.4rem .4rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  select{border:1px solid var(--border);border-radius:.45rem;padding:.4rem .4rem;font:inherit;background:var(--bg);color:inherit}
+  .num{color:var(--muted);font-variant-numeric:tabular-nums;width:1.6rem;text-align:center}
+  .x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;line-height:1;padding:.2rem .3rem;border-radius:.4rem}
+  .x:hover{color:var(--red);background:var(--muted-bg)}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0 1.8rem}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .stat{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 1rem}
+  .stat>div{min-width:8rem}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:700;
+    line-height:1;letter-spacing:-.02em}
+  .stat span{display:block;color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  .bar{height:.55rem;border-radius:999px;background:var(--border);overflow:hidden;margin:.3rem 0 1rem;max-width:32rem}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .q{margin:1.6rem 0 0;padding-left:1.1rem}
+  .q li{margin:.3rem 0;color:var(--fg)}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .hint{color:var(--muted);font-size:.82rem;margin:.2rem 0 1rem}
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .table-scroll table{min-width:34rem}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+  @media(max-width:640px){
+    td input[type=text]{min-width:7rem}
+    .stat>div{min-width:6.5rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · chapter 3</p>
+  <h1>One-week inventory</h1>
+  <p class="lede">List last week's tasks as they happened. Use your calendar and messages, not your job description. Sort the tasks into buckets and see how exposed your week is to cheap AI.</p>
+  <p class="privacy"><b>Your data stays with you:</b> the calculation runs in your browser, and nothing is sent anywhere.</p>
+
+  <div class="table-scroll"><table id="tbl">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th style="width:38%">Task (specific)</th>
+        <th>Hours</th>
+        <th>Bucket</th>
+        <th>Lever</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+  <p class="hint">Bucket: 🟢 AI alone · 🟡 person + AI · 🔴 person only. Lever (chapter 2): ① new revenue · ② savings · ③ attention/trust · none means activity without clear value.</p>
+
+  <div class="row-actions">
+    <button class="btn" id="add">+ Task</button>
+    <button class="btn btn--primary" id="calc">Calculate exposure</button>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Companion tool for the "Week inventory" worksheet in When Intelligence Became Cheap (chapter 3). The buckets change over time, so review them every six months. <b>Check the result:</b> this maps your week, not your profession. The code is MIT licensed. Your data never leaves the browser. Version 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var rows = document.getElementById('rows');
+  function row(i){
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="num"></td>'+
+      '<td><input type="text" placeholder="for example, prepared a management spreadsheet"></td>'+
+      '<td><input type="number" min="0" step="0.5" placeholder="h"></td>'+
+      '<td><select class="bucket"><option value="">-</option>'+
+        '<option value="g">🟢 AI alone</option><option value="y">🟡 person + AI</option>'+
+        '<option value="r">🔴 person only</option></select></td>'+
+      '<td><select class="lever"><option value="">-</option>'+
+        '<option value="1">① revenue</option><option value="2">② savings</option>'+
+        '<option value="3">③ attention</option><option value="x">none</option></select></td>'+
+      '<td><button class="x" title="Remove">✕</button></td>';
+    tr.querySelector('.x').onclick = function(){ tr.remove(); renumber(); };
+    return tr;
+  }
+  function renumber(){
+    [].forEach.call(rows.children, function(tr,idx){ tr.querySelector('.num').textContent = idx+1; });
+    if(!rows.children.length) addRow();
+  }
+  function addRow(){ rows.appendChild(row()); renumber(); }
+  document.getElementById('add').onclick = addRow;
+  for(var k=0;k<4;k++) addRow();
+
+  function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  document.getElementById('calc').onclick = function(){
+    var data = [];
+    [].forEach.call(rows.children, function(tr){
+      var task = tr.querySelector('input[type=text]').value.trim();
+      var h = parseFloat(tr.querySelector('input[type=number]').value)||0;
+      var b = tr.querySelector('.bucket').value;
+      var l = tr.querySelector('.lever').value;
+      if(task || h || b) data.push({task:task,h:h,b:b,l:l});
+    });
+    var out = document.getElementById('out');
+    if(!data.length){ out.innerHTML = '<p class="hint">Add at least one task with a bucket and hours.</p>'; return; }
+    var total=0, gy=0, g=0, dash=0, unrated=0;
+    data.forEach(function(d){
+      total+=d.h;
+      if(d.b==='g'||d.b==='y') gy+=d.h;
+      if(d.b==='g') g+=d.h;
+      if(!d.b) unrated++;
+      if(d.l==='x') dash++;
+    });
+    var pctGY = total? Math.round(gy/total*100):0;
+    var pctG = total? Math.round(g/total*100):0;
+    var summary =
+      'WEEK INVENTORY | '+new Date().toISOString().slice(0,10)+'\n'+
+      'Tasks: '+data.length+' · hours: '+total+'\n'+
+      'Exposure (🟢+🟡): '+pctGY+'% of time · 🟢 share: '+pctG+'%\n'+
+      'Tasks with no lever (activity, not value): '+dash+'\n\n'+
+      data.map(function(d,i){
+        var bn={g:'🟢',y:'🟡',r:'🔴'}[d.b]||'·';
+        var ln={'1':'① revenue','2':'② savings','3':'③ attention','x':'none'}[d.l]||'·';
+        return (i+1)+'. '+(d.task||'(untitled)')+' - '+bn+' · '+d.h+'h · '+ln;
+      }).join('\n');
+
+    out.innerHTML =
+      '<div class="result">'+
+        '<div class="stat">'+
+          '<div><b>'+pctGY+'%</b><span>of time in 🟢+🟡, your exposure</span></div>'+
+          '<div><b>'+pctG+'%</b><span>in 🟢 AI alone</span></div>'+
+          '<div><b>'+dash+'</b><span>tasks with no lever</span></div>'+
+        '</div>'+
+        '<div class="bar"><i style="width:'+pctGY+'%"></i></div>'+
+        (unrated? '<p class="hint">'+unrated+' tasks have no bucket and are excluded from the percentage.</p>':'')+
+        '<p style="margin:.2rem 0 .4rem">Three questions after you fill this in:</p>'+
+        '<ol class="q">'+
+          '<li>Which tasks have <b>already become cheaper</b>, even if I still do them by hand?</li>'+
+          '<li>Which tasks do I keep <b>to feel busy</b> rather than to produce an outcome?</li>'+
+          '<li>Why are there so few 🔴 tasks? <b>Does my role lack them, or am I avoiding them?</b></li>'+
+        '</ol>'+
+        '<p style="margin:1.2rem 0 .2rem">The six-month goal is to move the weight of your week, not get faster at 🟢 tasks:'+
+        ' add <b>two or three 🔴 tasks each week</b> where your value is rising.</p>'+
+        '<button class="btn" id="copy">Copy result</button> '+
+        '<button class="btn" id="saveProfile">💾 Save to My Profile</button>'+
+        '<p class="profile-note">Saved only in this browser. Nothing is sent anywhere. <a href="../my-profile/tool.html">My Profile →</a></p>'+
+        '<pre id="sum">'+esc(summary)+'</pre>'+
+      '</div>';
+    document.getElementById('copy').onclick = function(){
+      navigator.clipboard && navigator.clipboard.writeText(summary);
+      this.textContent='Copied ✓';
+    };
+    document.getElementById('saveProfile').onclick = function(){
+      var score = pctGY+'% in 🟢+🟡';
+      var summaryLine = 'Exposure (🟢+🟡): '+pctGY+'% of time · 🟢 share: '+pctG+'%';
+      var ok = saveToProfile('week-inventory','Week inventory',score,summaryLine);
+      this.textContent = ok ? '✓ Saved' : 'Could not save (private mode?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

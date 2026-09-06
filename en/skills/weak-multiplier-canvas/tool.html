@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weak multiplier canvas - Practicum "When Intelligence Became Cheap"</title>
+
+<style>
+  :root{
+    --bg:#fff;--fg:#0a0a0a;--muted:#71717a;--muted-bg:#f4f4f5;--border:#e4e4e7;
+    --primary:#4f46e5;--primary-d:#4338ca;--accent:#f59e0b;--green:#10b981;--red:#ef4444;--radius:.75rem;--radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  h2{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:1.05rem;margin:1.8rem 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .3rem}
+  .formula{font-family:var(--display);font-weight:600;margin:.4rem 0 1rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.4rem}.privacy b{color:var(--green)}
+  .m{border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin:.6rem 0}
+  .m .top{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+  .m h3{font-family:var(--display);margin:0;font-size:1rem}
+  .m .star{color:var(--accent)}
+  .m p{margin:.15rem 0 .55rem;color:var(--muted);font-size:.86rem}
+  .m .val{font-family:var(--display);font-weight:700;font-variant-numeric:tabular-nums;color:var(--primary)}
+  input[type=range]{width:100%;accent-color:var(--primary)}
+  .ends{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);margin-top:.1rem}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff;margin-top:1.4rem}
+  .btn--primary:hover{background:var(--primary-d)}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1.2rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result .big{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,3vw,1.9rem);letter-spacing:-.02em;margin:0 0 .2rem}
+  .prod{display:flex;flex-wrap:wrap;gap:.4rem .7rem;align-items:baseline;font-variant-numeric:tabular-nums;color:var(--muted);margin:.1rem 0 .6rem}
+  .move{margin:.8rem 0 0}.move label{display:block;font-size:.85rem;color:var(--muted);margin:.5rem 0 .25rem}
+  .move textarea{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit;color:inherit;background:var(--bg);min-height:3.4rem;resize:vertical}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .warn{border-left:3px solid var(--accent);background:rgba(245,158,11,.08);padding:.6rem .8rem;border-radius:.5rem;margin:.7rem 0;font-size:.88rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · chapter 11</p>
+  <h1>Weak multiplier canvas</h1>
+  <p class="lede">Your market value works like the <b>product</b> of four multipliers, not their sum. If one is close to zero, the result is close to zero. Your 90-day plan is one move that raises the weakest multiplier.</p>
+  <p class="formula">Market × Leverage × Transferability <span style="color:var(--accent)">⭐</span> × Expertise</p>
+  <p class="privacy"><b>Your data stays with you:</b> everything runs in your browser.</p>
+
+  <div id="mults"></div>
+
+  <button class="btn btn--primary" id="calc">Find the weak multiplier</button>
+  <div id="out"></div>
+
+  <footer>
+    Companion tool for the Transferability Canvas in chapter 11 and the appendix. This is a priority filter, not an order to drop everything and build software. Meaning, care, and craft for their own sake do not have to pass this test. <b>Do not take the score on faith. Check it against real work.</b> The code is MIT licensed. Your data never leaves the browser. Version 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var M=[
+    {k:'mkt',t:'Market',q:'Do people pay for this, and is demand growing?',lo:'almost no market',hi:'large or growing demand'},
+    {k:'lev',t:'Leverage',q:'Can software, an audience, or agents multiply one hour of your work, or do you still trade one hour for one hour?',lo:'one hour for one hour',hi:'software, audience, or team multiplies it'},
+    {k:'ali',t:'Transferability',star:true,q:'Can the result live and move without you as an asset, product, code, or reputation?',lo:'depends on you personally',hi:'can be transferred or sold'},
+    {k:'exp',t:'Expertise',q:'Are you near the top, perhaps through a rare combination in a narrow field?',lo:'common level',hi:'top through niche or combination'}
+  ];
+  var box=document.getElementById('mults');
+  M.forEach(function(m){
+    var el=document.createElement('div'); el.className='m';
+    el.innerHTML=
+      '<div class="top"><h3>'+m.t+(m.star?' <span class="star">⭐</span>':'')+'</h3><span class="val" id="v-'+m.k+'">0</span></div>'+
+      '<p>'+m.q+'</p>'+
+      '<input type="range" min="0" max="3" step="1" value="0" id="r-'+m.k+'">'+
+      '<div class="ends"><span>0: '+m.lo+'</span><span>3: '+m.hi+'</span></div>';
+    box.appendChild(el);
+    var r=el.querySelector('#r-'+m.k), v=el.querySelector('#v-'+m.k);
+    r.oninput=function(){ v.textContent=r.value; };
+  });
+
+  document.getElementById('calc').onclick=function(){
+    var vals=M.map(function(m){ return {t:m.t,k:m.k,star:!!m.star,v:+document.getElementById('r-'+m.k).value}; });
+    var product=vals.reduce(function(a,b){return a*b.v;},1);
+    var min=Math.min.apply(null,vals.map(function(x){return x.v;}));
+    var weakest=vals.filter(function(x){return x.v===min;});
+
+    var order={ali:0,lev:1,mkt:2,exp:3};
+    weakest.sort(function(a,b){return order[a.k]-order[b.k];});
+    var w=weakest[0];
+    var hint={
+      'Market':'check who needs this and what they will pay. If the market is thin, move toward a nearby field with growing demand',
+      'Leverage':'turn one-off work into something repeatable, such as a template, product, audience, or agent',
+      'Transferability':'package your knowledge so people can use it without you: a product, process, code, public asset, or AI tool ("The human as a system," chapter 6)',
+      'Expertise':'go deeper in a narrow field or build a rare skill combination where you can credibly rank near the top'
+    }[w.t];
+    var d=new Date();
+    var summary='WEAK MULTIPLIER CANVAS | '+d.toISOString().slice(0,10)+'\n'+
+      vals.map(function(x){return '• '+x.t+(x.star?' ⭐':'')+': '+x.v+'/3';}).join('\n')+'\n'+
+      'Product: '+vals.map(function(x){return x.v;}).join(' × ')+' = '+product+'\n\n'+
+      'Weakest multiplier: '+w.t+'\n90-day move: '+hint;
+
+    var out=document.getElementById('out');
+    out.innerHTML='<div class="result">'+
+      (product===0
+        ? '<p class="big">Result: 0. The bottleneck is visible</p>'
+        : '<p class="big">Result: '+product+' out of 81</p>')+
+      '<div class="prod">'+vals.map(function(x){return x.t+' '+x.v;}).join(' &nbsp;×&nbsp; ')+' = <b style="color:var(--fg)">'+product+'</b></div>'+
+      '<p style="margin:.4rem 0 .2rem"><b>Weakest multiplier: '+w.t+(w.star?' ⭐':'')+'.</b> This is where your value gets stuck.</p>'+
+      '<p style="margin:.2rem 0"><b>One move for the next 90 days:</b> '+hint+'.</p>'+
+      '<div class="move"><label>Write the move in your own words. Pick one, not three:</label>'+
+        '<textarea id="mv">'+hint+'</textarea></div>'+
+      '<div class="warn">This is a product, not a sum. Raise the weakest multiplier instead of polishing the strongest one.'+
+      ' Leverage and transferability are often the weak points. The book shows how to stop selling only your time.</div>'+
+      '<button class="btn" id="copy">Copy result</button> '+
+      '<button class="btn" id="saveProfile">💾 Save to My Profile</button>'+
+      '<p class="profile-note">Saved only in this browser. Nothing is sent anywhere. <a href="../my-profile/tool.html">My Profile →</a></p>'+
+      '<pre id="sum"></pre>'+
+    '</div>';
+    function render(){ var mv=document.getElementById('mv').value;
+      var s=summary.replace(/90-day move: .*/,'90-day move: '+mv);
+      document.getElementById('sum').textContent=s; return s; }
+    render();
+    document.getElementById('mv').oninput=render;
+    document.getElementById('copy').onclick=function(){ navigator.clipboard&&navigator.clipboard.writeText(render()); this.textContent='Copied ✓'; };
+    document.getElementById('saveProfile').onclick=function(){
+      var score='Result: '+product+'/81';
+      var summaryLine='Weakest multiplier: '+w.t;
+      var ok=saveToProfile('weak-multiplier-canvas','Weak multiplier canvas',score,summaryLine);
+      this.textContent = ok ? '✓ Saved' : 'Could not save (private mode?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

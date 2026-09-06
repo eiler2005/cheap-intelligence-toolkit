@@ -1,0 +1,47 @@
+name: Лист не сработал или устарел
+description: Прошли рабочий лист и уперлись во что-то — расскажите во что
+labels: ["материал"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Это самый полезный вид обратной связи: он показывает, где общая модель ломается о реальность,
+        и может изменить материал на сайте, а не только здесь.
+  - type: input
+    id: playbook
+    attributes:
+      label: Какой лист
+      placeholder: playbooks/agent-contract.md
+    validations:
+      required: true
+  - type: dropdown
+    id: volume
+    attributes:
+      label: Том
+      options: ["Том 1 — Человек", "Том 2 — Бизнес", "Том 3 — Доверие", "Не знаю"]
+    validations:
+      required: true
+  - type: input
+    id: role
+    attributes:
+      label: Ваша роль и отрасль
+      description: Нужно, чтобы понять контекст. Без названия компании.
+      placeholder: главбух в производственной компании, 60 человек
+  - type: textarea
+    id: what
+    attributes:
+      label: Что именно не сработало
+      description: Где вы застряли, какой шаг оказался неприменим, чего не хватило.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Чего вы ждали вместо этого
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Проверка перед отправкой
+      options:
+        - label: В тексте нет персональных данных, коммерческой тайны и материалов под NDA
+          required: true

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сборщик личного харнесса — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Зеро-инстал инструмент к главе 6 («Человек как система»). Один файл, без сети.
+  Логика — companion/docs/playbooks/personal-harness-builder.md. Код: MIT.
+-->
+<style>
+  :root{
+    --bg:#fff;--fg:#0a0a0a;--muted:#71717a;--muted-bg:#f4f4f5;--border:#e4e4e7;
+    --primary:#4f46e5;--primary-d:#4338ca;--accent:#f59e0b;--green:#10b981;--red:#ef4444;--radius:.75rem;--radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:48rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.4rem}.privacy b{color:var(--green)}
+  .lay{border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin:.6rem 0}
+  .lay h3{font-family:var(--display);margin:0 0 .15rem;font-size:1rem}
+  .lay h3 span{color:var(--muted);font-weight:400;font-size:.85rem}
+  .lay p{margin:0 0 .55rem;color:var(--muted);font-size:.86rem}
+  .opts{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+  .opts label{font-size:.85rem;border:1px solid var(--border);border-radius:999px;padding:.3rem .7rem;cursor:pointer}
+  .opts input{margin-right:.35rem}
+  .opts label.v1{border-color:var(--red)}
+  .opts label.v2{border-color:var(--accent)}
+  .opts label.v3{border-color:var(--green)}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff;margin-top:1.4rem}
+  .btn--primary:hover{background:var(--primary-d)}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1.2rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result .big{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,3vw,1.8rem);letter-spacing:-.02em;margin:0 0 .3rem}
+  .bars{margin:.6rem 0}
+  .bar{display:flex;align-items:center;gap:.5rem;margin:.25rem 0;font-size:.85rem}
+  .bar .nm{width:5.5rem;color:var(--muted)}
+  .bar .track{flex:1;height:.5rem;background:var(--border);border-radius:999px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:999px}
+  .move{margin:.9rem 0 0}.move label{display:block;font-size:.85rem;color:var(--muted);margin:.5rem 0 .25rem}
+  .move textarea{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit;color:inherit;background:var(--bg);min-height:3.5rem;resize:vertical}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .warn{border-left:3px solid var(--accent);background:rgba(245,158,11,.08);padding:.6rem .8rem;border-radius:.5rem;margin:.7rem 0;font-size:.88rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · глава 6</p>
+  <h1>Сборщик личного харнесса</h1>
+  <p class="lede">Харнесс — система вокруг ИИ, которая и определяет результат: не мотор-модель, а вся
+  машина. Оцените семь слоёв своей личной системы по шкале 1–3 — инструмент найдёт самое слабое звено
+  и предложит один ход. Цепь прочна настолько, насколько прочно слабейшее звено.</p>
+  <p class="privacy"><b>Данные остаются у вас:</b> всё считается в браузере.</p>
+
+  <div id="layers"></div>
+
+  <button class="btn btn--primary" id="calc">Найти слабое звено и ход</button>
+  <div id="out"></div>
+
+  <footer>
+    Инструмент к рабочему листу «Personal Harness Builder» (глава 6). Оценка: 1 — нет/случайно,
+    2 — есть, но непоследовательно, 3 — работает системно. Укреплять слабейшее звено, не оттачивать
+    сильное. <b>Не верьте — проверьте.</b> Код — MIT, данные не покидают браузер. Версия 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var L=[
+    {k:'think',t:'Thinking',s:'думаю вместе с ИИ, сохраняя навык',q:'Есть привычный способ работать с ИИ над сложным; отличаю, когда ошибается; сохраняю навык решать без него?',
+      mv:'раз в неделю решайте ключевую задачу без ИИ и ведите список «где ИИ врёт в моей области»'},
+    {k:'know',t:'Knowledge',s:'личная база знаний',q:'Есть своё место для материалов/шаблонов/выводов; передаю контекст задачи за 2 минуты; база — моя, не в чужих системах?',
+      mv:'заведите одно место для своих материалов и шаблонов, которое переживёт смену работодателя'},
+    {k:'tools',t:'Tools',s:'инструменты с понятной ролью',q:'Для каждого инструмента объясню, зачем именно он; 3–5 базовых с ролями, не 20 подписок; ревизия раз в квартал?',
+      mv:'сократите до 3–5 инструментов с ясной ролью; ревизия раз в квартал, а не каждые две недели'},
+    {k:'proof',t:'Proof',s:'публичные артефакты работы',q:'Есть публичное (статья, репо, кейс, портфолио) за 6 месяцев; кто-то извне может судить о работе по открытому?',
+      mv:'сделайте один публичный артефакт за квартал: разбор, репо, кейс, презентацию'},
+    {k:'trust',t:'Trust',s:'репутация за качество',q:'Мне доверяют, что факты проверены; есть привычка верификации ИИ-выводов; называют по имени за надёжность?',
+      mv:'встройте проверку ИИ-выводов до передачи и показывайте, как именно вы проверили'},
+    {k:'outcome',t:'Outcome',s:'связь работы с результатом',q:'Объясню, как работа влияет на метрику/решение/клиента; был момент «вот что изменилось»; слежу, использовали ли результат?',
+      mv:'свяжите каждую задачу с метрикой, решением или клиентом и следите, использовали ли результат'},
+    {k:'skills',t:'Skills',s:'повторяемые навыки системы',q:'Есть хотя бы один способ работы, описанный как инструкция; повтор 3 раза → шаблон/skill; в skills есть границы остановки?',
+      mv:'задачу, повторённую 3 раза, превратите в шаблон/чек-лист/skill с границей «где остановиться и спросить человека»'}
+  ];
+  var box=document.getElementById('layers');
+  L.forEach(function(d){
+    var el=document.createElement('div'); el.className='lay';
+    el.innerHTML='<h3>'+d.t+' <span>— '+d.s+'</span></h3><p>'+d.q+'</p>'+
+      '<div class="opts">'+
+        '<label class="v1"><input type="radio" name="'+d.k+'" value="1">1 · нет</label>'+
+        '<label class="v2"><input type="radio" name="'+d.k+'" value="2">2 · непоследовательно</label>'+
+        '<label class="v3"><input type="radio" name="'+d.k+'" value="3">3 · системно</label>'+
+      '</div>';
+    box.appendChild(el);
+  });
+
+  document.getElementById('calc').onclick=function(){
+    var out=document.getElementById('out');
+    var picks=L.map(function(d){
+      var r=document.querySelector('input[name="'+d.k+'"]:checked');
+      return {t:d.t, s:d.s, mv:d.mv, v:r?parseInt(r.value,10):null};
+    });
+    if(picks.some(function(p){return !p.v;})){ out.innerHTML='<p class="warn">Оцените все семь слоёв (1–3).</p>'; return; }
+
+    var total=picks.reduce(function(a,p){return a+p.v;},0);
+    var min=Math.min.apply(null,picks.map(function(p){return p.v;}));
+    var weak=picks.filter(function(p){return p.v===min;});
+    var pick=weak[0];
+
+    var verdict = total>=18 ? 'Крепкая система' : total>=12 ? 'Система собирается' : 'Пока набор инструментов, не система';
+    var col=function(v){return v===1?'var(--red)':v===2?'var(--accent)':'var(--green)';};
+
+    var bars=picks.map(function(p){
+      return '<div class="bar"><span class="nm">'+p.t+'</span><span class="track"><span class="fill" style="width:'+(p.v/3*100)+'%;background:'+col(p.v)+'"></span></span><b>'+p.v+'</b></div>';
+    }).join('');
+
+    var d=new Date(); var rev=new Date(d.getTime()+92*864e5).toISOString().slice(0,10);
+    var summary='ЛИЧНЫЙ ХАРНЕСС — '+d.toISOString().slice(0,10)+'\n'+
+      picks.map(function(p){return '• '+p.t+' ('+p.s+'): '+p.v+'/3';}).join('\n')+
+      '\nИтого: '+total+'/21 — '+verdict+
+      '\n\nСлабое звено: '+pick.t+'\nХод: '+pick.mv+'\nДата проверки: '+rev;
+
+    out.innerHTML='<div class="result">'+
+      '<p class="big">'+verdict+' · '+total+'/21</p>'+
+      '<div class="bars">'+bars+'</div>'+
+      '<p style="margin:.4rem 0 0"><b>Слабое звено:</b> '+pick.t+' — '+pick.s+
+        (weak.length>1?' (и ещё '+(weak.length-1)+' на том же уровне)':'')+'.</p>'+
+      '<p style="margin:.2rem 0"><b>Один ход:</b> '+pick.mv+'.</p>'+
+      '<div class="move">'+
+        '<label>Сформулируйте ход своими словами (один слой, не семь):</label>'+
+        '<textarea id="mv">'+pick.mv+'</textarea>'+
+        '<label>Дата проверки:</label><input type="text" id="rv" value="'+rev+'" style="width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit"></div>'+
+      '<div class="warn">Укрепляйте слабейшее звено, а не сильное. Один слой на квартал — потом следующий.</div>'+
+      '<button class="btn" id="copy">Копировать итог</button> '+
+      '<button class="btn" id="saveProfile">💾 В мой профиль</button>'+
+      '<p class="profile-note">Хранится только в этом браузере, никуда не отправляется. <a href="../my-profile/tool.html">Мой профиль →</a></p>'+
+      '<pre id="sum"></pre>'+
+    '</div>';
+    function render(){
+      var mv=document.getElementById('mv').value, rv=document.getElementById('rv').value;
+      var s=summary.replace(/Ход: .*\n/,'Ход: '+mv+'\n').replace(/Дата проверки: .*/,'Дата проверки: '+rv);
+      document.getElementById('sum').textContent=s; return s;
+    }
+    render();
+    document.getElementById('mv').oninput=render; document.getElementById('rv').oninput=render;
+    document.getElementById('copy').onclick=function(){ navigator.clipboard&&navigator.clipboard.writeText(render()); this.textContent='Скопировано ✓'; };
+    document.getElementById('saveProfile').onclick=function(){
+      var score=verdict+' · '+total+'/21';
+      var summaryLine='Слабое звено: '+pick.t+' — '+pick.s;
+      var ok=saveToProfile('personal-harness-builder','Сборщик личного харнесса',score,summaryLine);
+      this.textContent = ok ? '✓ Сохранено' : 'Не удалось (приватный режим?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

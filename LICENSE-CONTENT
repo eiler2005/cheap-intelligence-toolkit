@@ -1,0 +1,33 @@
+# Лицензия на тексты — CC BY-NC-SA 4.0
+
+Copyright (c) 2026 Денис Ермилов / Denis Ermilov
+
+Все тексты этого репозитория — файлы `.md`: рабочие листы, промпты, навыки, документация и пакеты —
+распространяются по лицензии **Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+International (CC BY-NC-SA 4.0)**.
+
+Полный текст лицензии: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+Краткое изложение: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ru
+
+Коротко, что это значит:
+
+- **Можно** копировать, распространять, перерабатывать и адаптировать под себя, свою команду и свою
+  отрасль.
+- **Указывайте автора** (Денис Ермилов), название Практикума, адрес страницы и её дату проверки.
+  Живые материалы меняются — дата является частью утверждения.
+- **Без коммерческого использования.** Продавать эти материалы, включать их в платные курсы и
+  продукты нельзя без отдельного письменного разрешения автора.
+- **На тех же условиях.** Переработанное распространяется под этой же лицензией.
+
+Код (`skills/*/tool.html` и скрипты) лицензирован отдельно, по MIT: см. файл `LICENSE`.
+
+Текст книг серии «Когда интеллект стал дешёвым» под эту лицензию **не подпадает** и в репозитории не
+публикуется. Все права на книги сохраняются за автором и издателем.
+
+---
+
+All prose in this repository — every `.md` file — is licensed under CC BY-NC-SA 4.0. You may copy,
+distribute and adapt it, including for your own industry, provided you credit Denis Ermilov and the
+Practicum with the page address and its verification date, do not use it commercially without
+written permission, and share adaptations under the same licence. Code is MIT — see `LICENSE`. The
+text of the books themselves is not covered by this licence and is not published here.

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process maturity check - Practicum "When Intelligence Became Cheap"</title>
+
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  .field{margin:0 0 1.1rem}
+  .field>label{display:block;font-weight:600;font-size:.92rem;margin:0 0 .35rem}
+  input[type=text],select{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  select{max-width:30rem}
+  .box{border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin:0 0 1.1rem}
+  .box h2{font-family:var(--display);font-size:1.02rem;margin:0 0 .5rem;letter-spacing:-.01em}
+  label.chk{display:flex;gap:.6rem;align-items:flex-start;padding:.35rem 0;cursor:pointer}
+  label.chk input{margin-top:.25rem;width:1.05rem;height:1.05rem;accent-color:var(--primary);flex:none}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:.4rem 0 1.8rem}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .stat{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 1rem}
+  .stat>div{min-width:8rem}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;line-height:1.05;letter-spacing:-.02em}
+  .stat span{display:block;color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .q{margin:1rem 0 0;padding-left:1.1rem}
+  .q li{margin:.3rem 0}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .hint{color:var(--muted);font-size:.82rem;margin:.2rem 0 1rem}
+  .report{margin-top:1.3rem;padding-top:1.1rem;border-top:1px dashed var(--border)}
+  .report h2{font-family:var(--display);font-size:1.05rem;margin:0 0 .5rem;letter-spacing:-.01em}
+  .report-meta{color:var(--muted);font-size:.85rem;margin:0 0 .8rem}
+  .report-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0 .4rem}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+  @media print{
+    body *{visibility:hidden}
+    #out,#out *{visibility:visible}
+    #out{position:absolute;left:0;top:0;width:100%;padding:0}
+    #out .btn,#out pre,#out .profile-note{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · Volume 2 · chapter 1</p>
+  <h1>Process maturity check</h1>
+  <p class="lede">Choose <b>one</b> process, not the whole company. Mark what is already true. You will see where AI is only a surface upgrade and where the process has started to change.</p>
+  <p class="privacy"><b>Your data stays with you:</b> the calculation runs in your browser, and nothing is sent anywhere.</p>
+
+  <div class="field">
+    <label for="proc">Process (one only)</label>
+    <input type="text" id="proc" placeholder="for example, review an incoming contract">
+  </div>
+
+  <div class="box">
+    <h2>Six signs of a real redesign</h2>
+    <label class="chk"><input type="checkbox"> The workflow changed. The steps are different instead of simply faster.</label>
+    <label class="chk"><input type="checkbox"> Roles changed. People now spend more time framing and reviewing the work.</label>
+    <label class="chk"><input type="checkbox"> Metrics changed. We track the outcome or cycle, not output volume.</label>
+    <label class="chk"><input type="checkbox"> Quality review is built into the workflow, not left for when someone has time.</label>
+    <label class="chk"><input type="checkbox"> A person still owns the critical point where an error would be costly.</label>
+    <label class="chk"><input type="checkbox"> The process has a measurable customer or financial outcome.</label>
+  </div>
+
+  <div class="field">
+    <label for="lvl">Current process level (0-5)</label>
+    <select id="lvl">
+      <option value="">Choose one</option>
+      <option value="0">0: AI is not used</option>
+      <option value="1">1: Ad hoc experiments, no system</option>
+      <option value="2">2: Personal productivity, same process</option>
+      <option value="3">3: Team process with review</option>
+      <option value="4">4: Operating model redesigned around AI</option>
+      <option value="5">5: AI-native, different process and measurable outcome</option>
+    </select>
+  </div>
+
+  <div class="row-actions">
+    <button class="btn btn--primary" id="calc">Check the process</button>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Companion tool for the "Process maturity check" worksheet in When Intelligence Became Cheap, Volume 2, chapter 1.
+    <b>This is a mirror, not an audit:</b> it looks at one process. Treat the score as a prompt for discussion. You can copy or print the report for your team. The code is MIT licensed. Your data never leaves the browser. Version 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+
+
+
+
+  var ACTIONS = [
+    'Decide which workflow steps need to change instead of simply running faster.',
+    'Name the outcome owner. Decide who frames the work and who reviews it.',
+    'Replace an output-volume metric with an outcome metric that appears in reporting.',
+    'Build quality review into the workflow and name the reviewer. AI should not be the only reviewer of AI output.',
+    'Find the point where an error would be costly and give a person the authority to stop the process.',
+    'Define a measurable customer or financial outcome. Use a number, not "we adopted AI."'
+  ];
+
+  var FALLBACK = [
+    'Write down the new workflow and roles so the team does not slip back to a surface upgrade.',
+    'Check where a person owns the critical point. That control is often the first thing lost at scale.',
+    'If the process is at level 2 or 3, use the Human Review Matrix next. Decide what AI can do and what a person must keep (book chapter 2).'
+  ];
+
+  document.getElementById('calc').onclick = function(){
+    var proc = document.getElementById('proc').value.trim();
+    var checks = 0;
+    var answers = [];
+    var missingActions = [];
+    document.querySelectorAll('.box label.chk').forEach(function(label, i){
+      var input = label.querySelector('input[type=checkbox]');
+      var text = label.textContent.trim();
+      if(input.checked){ checks++; } else if(ACTIONS[i]){ missingActions.push(ACTIONS[i]); }
+      answers.push((input.checked?'✓ ':'- ')+text);
+    });
+    var lvlRaw = document.getElementById('lvl').value;
+    var lvl = lvlRaw==='' ? null : parseInt(lvlRaw,10);
+    var lvlSelect = document.getElementById('lvl');
+    var lvlText = lvlRaw==='' ? '' : lvlSelect.options[lvlSelect.selectedIndex].textContent;
+
+    var diag, note;
+    if(checks <= 2){ diag='Surface upgrade'; note='AI makes the old process faster. That is a reasonable start, but the source of value has not changed yet.'; }
+    else if(checks >= 5){ diag='System redesign'; note='The process is genuinely different. Next, scale it while keeping a person at the critical point.'; }
+    else { diag='Process in transition'; note='Roles and review have started to change. The next decisions will show whether this becomes a new model or slips back into simple acceleration.'; }
+    if(lvl!==null && lvl<=2 && diag!=='Surface upgrade'){ diag='Surface upgrade'; note='Some signs are present, but the process level is still low (0-2). This is acceleration of the old process, not a redesign.'; }
+    if(lvl!==null && lvl>=4 && checks>=4){ diag='System redesign'; note='The level is high and most signs are present. The process has been redesigned around AI.'; }
+
+    var steps = missingActions.concat(FALLBACK).slice(0,3);
+    var todayISO = new Date().toISOString().slice(0,10);
+
+    var summary =
+      'PROCESS MATURITY CHECK | When Intelligence Became Cheap Practicum\n'+
+      'Date: '+todayISO+'\n'+
+      'Process: '+(proc||'(not provided)')+'\n\n'+
+      'Answers (signs of redesign):\n'+answers.join('\n')+'\n\n'+
+      'Signs of redesign: '+checks+'/6'+(lvl!==null?(' · Level: '+lvlText):'')+'\n'+
+      'Diagnosis: '+diag+'\n\n'+
+      'Interpretation:\n'+note+'\n\n'+
+      'Three next steps:\n'+steps.map(function(s,i){ return (i+1)+'. '+s; }).join('\n')+'\n\n'+
+      'When Intelligence Became Cheap Practicum, Process maturity check (Volume 2, chapter 1)';
+
+    document.getElementById('out').innerHTML =
+      '<div class="result">'+
+        '<div class="stat">'+
+          '<div><b>'+esc(diag)+'</b><span>process diagnosis</span></div>'+
+          '<div><b>'+checks+'/6</b><span>signs'+(lvl!==null?(' · level '+lvl+'/5'):'')+'</span></div>'+
+        '</div>'+
+        '<p style="margin:.2rem 0 0">'+esc(note)+'</p>'+
+        '<div class="report">'+
+          '<h2>Report</h2>'+
+          '<p class="report-meta"><b>Process maturity check</b> · Practicum "When Intelligence Became Cheap" · '+new Date().toLocaleDateString('en-US')+
+            (proc?(' · process: '+esc(proc)):'')+'</p>'+
+          '<p><b>Three next steps</b>, starting with the weakest signs:</p>'+
+          '<ol class="q">'+steps.map(function(s){ return '<li>'+esc(s)+'</li>'; }).join('')+'</ol>'+
+          '<div class="report-actions">'+
+            '<button class="btn" id="copy">📋 Copy report</button>'+
+            '<button class="btn" id="printBtn">🖨 Print</button>'+
+            '<button class="btn" id="saveProfile">💾 Save to My Profile</button>'+
+          '</div>'+
+          '<p class="profile-note">Saved only in this browser. Nothing is sent anywhere. <a href="../my-profile/tool.html">My Profile →</a></p>'+
+          '<pre id="sum">'+esc(summary)+'</pre>'+
+        '</div>'+
+      '</div>';
+    document.getElementById('copy').onclick = function(){
+      navigator.clipboard && navigator.clipboard.writeText(summary);
+      this.textContent='Copied ✓';
+    };
+    document.getElementById('printBtn').onclick = function(){ window.print(); };
+    document.getElementById('saveProfile').onclick = function(){
+      var score = diag+' · '+checks+'/6';
+      var ok = saveToProfile('ai-native-maturity-check','Process maturity check',score,note);
+      this.textContent = ok ? '✓ Saved' : 'Could not save (private mode?)';
+      if(ok) this.disabled = true;
+    };
+    document.getElementById('out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

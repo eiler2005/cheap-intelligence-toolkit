@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Канвас слабого множителя — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Зеро-инстал инструмент к главе 11 и приложению «Канвас отчуждаемости». Один файл, без сети:
+  всё считается в браузере, данные не уходят. Лицензия кода: MIT.
+  Логика — playbooks/weak-multiplier-canvas.md + appendices/kanvas-otchuzhdaemosti.md.
+  Ценность = Рынок × Рычаг × Отчуждаемость × Экспертиза (произведение, не сумма).
+-->
+<style>
+  :root{
+    --bg:#fff;--fg:#0a0a0a;--muted:#71717a;--muted-bg:#f4f4f5;--border:#e4e4e7;
+    --primary:#4f46e5;--primary-d:#4338ca;--accent:#f59e0b;--green:#10b981;--red:#ef4444;--radius:.75rem;--radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  h2{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:1.05rem;margin:1.8rem 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .3rem}
+  .formula{font-family:var(--display);font-weight:600;margin:.4rem 0 1rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.4rem}.privacy b{color:var(--green)}
+  .m{border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin:.6rem 0}
+  .m .top{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+  .m h3{font-family:var(--display);margin:0;font-size:1rem}
+  .m .star{color:var(--accent)}
+  .m p{margin:.15rem 0 .55rem;color:var(--muted);font-size:.86rem}
+  .m .val{font-family:var(--display);font-weight:700;font-variant-numeric:tabular-nums;color:var(--primary)}
+  input[type=range]{width:100%;accent-color:var(--primary)}
+  .ends{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);margin-top:.1rem}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff;margin-top:1.4rem}
+  .btn--primary:hover{background:var(--primary-d)}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1.2rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result .big{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,3vw,1.9rem);letter-spacing:-.02em;margin:0 0 .2rem}
+  .prod{display:flex;flex-wrap:wrap;gap:.4rem .7rem;align-items:baseline;font-variant-numeric:tabular-nums;color:var(--muted);margin:.1rem 0 .6rem}
+  .move{margin:.8rem 0 0}.move label{display:block;font-size:.85rem;color:var(--muted);margin:.5rem 0 .25rem}
+  .move textarea{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit;color:inherit;background:var(--bg);min-height:3.4rem;resize:vertical}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .warn{border-left:3px solid var(--accent);background:rgba(245,158,11,.08);padding:.6rem .8rem;border-radius:.5rem;margin:.7rem 0;font-size:.88rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · глава 11</p>
+  <h1>Канвас слабого множителя</h1>
+  <p class="lede">Ваша ценность на рынке работает не как сумма, а как <b>произведение</b> четырёх
+  множителей. Один близкий к нулю — и весь итог близок к нулю. План на 90 дней — это один ход,
+  поднимающий самый слабый.</p>
+  <p class="formula">Рынок × Рычаг × Отчуждаемость <span style="color:var(--accent)">⭐</span> × Экспертиза</p>
+  <p class="privacy"><b>Данные остаются у вас:</b> всё считается в браузере.</p>
+
+  <div id="mults"></div>
+
+  <button class="btn btn--primary" id="calc">Найти слабый множитель</button>
+  <div id="out"></div>
+
+  <footer>
+    Инструмент к «Канвасу отчуждаемости» (глава 11 и приложение). Это фильтр приоритетов, а не приказ
+    «бросай всё и иди в софт»: смысл, забота, мастерство ради мастерства проходить этот фильтр не
+    обязаны. <b>Не верьте — проверьте.</b> Код — MIT, данные не покидают браузер. Версия 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var M=[
+    {k:'mkt',t:'Рынок',q:'За это платят и спрос растёт?',lo:'ниши почти нет',hi:'большой/растущий спрос'},
+    {k:'lev',t:'Рычаг',q:'Один ваш час множится (софт, аудитория, агенты) — или «час за час»?',lo:'только час за час',hi:'софт/аудитория/команда множат'},
+    {k:'ali',t:'Отчуждаемость',star:true,q:'Результат живёт и передаётся без вас (актив, продукт, код, репутация)?',lo:'завязано лично на вас',hi:'можно передать/продать'},
+    {k:'exp',t:'Экспертиза',q:'Вы в верхних % — пусть за счёт редкой комбинации в узкой нише?',lo:'как у многих',hi:'топ за счёт ниши/комбинации'}
+  ];
+  var box=document.getElementById('mults');
+  M.forEach(function(m){
+    var el=document.createElement('div'); el.className='m';
+    el.innerHTML=
+      '<div class="top"><h3>'+m.t+(m.star?' <span class="star">⭐</span>':'')+'</h3><span class="val" id="v-'+m.k+'">0</span></div>'+
+      '<p>'+m.q+'</p>'+
+      '<input type="range" min="0" max="3" step="1" value="0" id="r-'+m.k+'">'+
+      '<div class="ends"><span>0 — '+m.lo+'</span><span>3 — '+m.hi+'</span></div>';
+    box.appendChild(el);
+    var r=el.querySelector('#r-'+m.k), v=el.querySelector('#v-'+m.k);
+    r.oninput=function(){ v.textContent=r.value; };
+  });
+
+  document.getElementById('calc').onclick=function(){
+    var vals=M.map(function(m){ return {t:m.t,k:m.k,star:!!m.star,v:+document.getElementById('r-'+m.k).value}; });
+    var product=vals.reduce(function(a,b){return a*b.v;},1);
+    var min=Math.min.apply(null,vals.map(function(x){return x.v;}));
+    var weakest=vals.filter(function(x){return x.v===min;});
+    // Если ноль у нескольких — приоритет отчуждаемости/рычага (про что вся книга).
+    var order={ali:0,lev:1,mkt:2,exp:3};
+    weakest.sort(function(a,b){return order[a.k]-order[b.k];});
+    var w=weakest[0];
+    var hint={
+      'Рынок':'проверьте, кому и за сколько это нужно; при тонком рынке — сдвиньтесь в смежную нишу с растущим спросом',
+      'Рычаг':'превратите разовое усилие в множимое: шаблон, продукт, аудитория или агент, который повторяет вашу работу',
+      'Отчуждаемость':'оформите своё знание так, чтобы им пользовались без вас: продукт, процесс, код, публичный актив (в т.ч. ваши ИИ-инструменты — «человек как система», гл. 6)',
+      'Экспертиза':'углубитесь в узкую нишу или соберите редкую комбинацию навыков, где вы реально в верхних %'
+    }[w.t];
+    var d=new Date();
+    var summary='КАНВАС СЛАБОГО МНОЖИТЕЛЯ — '+d.toISOString().slice(0,10)+'\n'+
+      vals.map(function(x){return '• '+x.t+(x.star?' ⭐':'')+': '+x.v+'/3';}).join('\n')+'\n'+
+      'Произведение: '+vals.map(function(x){return x.v;}).join(' × ')+' = '+product+'\n\n'+
+      'Самый слабый множитель: '+w.t+'\nХод на 90 дней: '+hint;
+
+    var out=document.getElementById('out');
+    out.innerHTML='<div class="result">'+
+      (product===0
+        ? '<p class="big">Итог: 0 — и видно, где затык</p>'
+        : '<p class="big">Итог: '+product+' из 81</p>')+
+      '<div class="prod">'+vals.map(function(x){return x.t+' '+x.v;}).join(' &nbsp;×&nbsp; ')+' = <b style="color:var(--fg)">'+product+'</b></div>'+
+      '<p style="margin:.4rem 0 .2rem"><b>Самый слабый множитель: '+w.t+(w.star?' ⭐':'')+'.</b> Там и буксует ваша ценность.</p>'+
+      '<p style="margin:.2rem 0"><b>Один ход на 90 дней:</b> '+hint+'.</p>'+
+      '<div class="move"><label>Сформулируйте этот ход своими словами (один, не три):</label>'+
+        '<textarea id="mv">'+hint+'</textarea></div>'+
+      '<div class="warn">Произведение, а не сумма: тянуть стоит самый слабый множитель, а не самый сильный.'+
+      ' Чаще всего проседают рычаг и отчуждаемость — про это вся книга: перестать продавать только время.</div>'+
+      '<button class="btn" id="copy">Копировать итог</button> '+
+      '<button class="btn" id="saveProfile">💾 В мой профиль</button>'+
+      '<p class="profile-note">Хранится только в этом браузере, никуда не отправляется. <a href="../my-profile/tool.html">Мой профиль →</a></p>'+
+      '<pre id="sum"></pre>'+
+    '</div>';
+    function render(){ var mv=document.getElementById('mv').value;
+      var s=summary.replace(/Ход на 90 дней: .*/,'Ход на 90 дней: '+mv);
+      document.getElementById('sum').textContent=s; return s; }
+    render();
+    document.getElementById('mv').oninput=render;
+    document.getElementById('copy').onclick=function(){ navigator.clipboard&&navigator.clipboard.writeText(render()); this.textContent='Скопировано ✓'; };
+    document.getElementById('saveProfile').onclick=function(){
+      var score='Итог: '+product+'/81';
+      var summaryLine='Самый слабый множитель: '+w.t;
+      var ok=saveToProfile('weak-multiplier-canvas','Канвас слабого множителя',score,summaryLine);
+      this.textContent = ok ? '✓ Сохранено' : 'Не удалось (приватный режим?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

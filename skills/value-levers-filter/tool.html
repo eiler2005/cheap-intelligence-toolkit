@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фильтр трёх рычагов — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Зеро-инстал инструмент к главе 2 Тома 1 книги «Когда интеллект стал дешёвым». Один файл, без сети:
+  всё считается в браузере, данные никуда не уходят. Лицензия кода: MIT.
+  Логика — рабочий лист companion/docs/playbooks/value-levers-filter.md (три рычага + output/outcome).
+  Это фильтр НАПРАВЛЕНИЯ, не калькулятор денег: ROI не считаем, обещаний не даём.
+-->
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  .field{margin:0 0 1.1rem}
+  .field>label{display:block;font-weight:600;font-size:.92rem;margin:0 0 .35rem}
+  input[type=text],select{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  select{max-width:34rem}
+  .box{border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin:0 0 1.1rem}
+  .box h2{font-family:var(--display);font-size:1.02rem;margin:0 0 .5rem;letter-spacing:-.01em}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:.4rem 0 1.8rem}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .stat{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 1rem}
+  .stat>div{min-width:8rem}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;line-height:1.05;letter-spacing:-.02em}
+  .stat span{display:block;color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  .tag{display:inline-block;font-family:var(--display);font-weight:600;font-size:.8rem;padding:.15rem .6rem;
+    border-radius:999px;margin-top:.2rem}
+  .tag--out{background:rgba(239,68,68,.12);color:#b91c1c}
+  .tag--mid{background:rgba(245,158,11,.14);color:#b45309}
+  .tag--own{background:rgba(16,185,129,.14);color:#047857}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .q{margin:1rem 0 0;padding-left:1.1rem}
+  .q li{margin:.3rem 0}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · Том 1 · глава 2</p>
+  <h1>Фильтр трёх рычагов</h1>
+  <p class="lede">Возьмите <b>одну</b> задачу или продукт. Через какой рычаг он создаёт ценность — и не
+  обнуляет ли её дешёвый ИИ? Фильтр покажет направление, а не сумму денег.</p>
+  <p class="privacy"><b>Данные остаются у вас:</b> расчёт идёт в браузере, ничего никуда не отправляется.</p>
+
+  <div class="field">
+    <label for="task">Задача или продукт (один)</label>
+    <input type="text" id="task" placeholder="напр. писать типовые коммерческие предложения">
+  </div>
+
+  <div class="field">
+    <label for="lever">Главный рычаг ценности</label>
+    <select id="lever">
+      <option value="">— выберите —</option>
+      <option value="sales">Новые продажи / рост — делаю то, что другим недоступно</option>
+      <option value="cost">Экономия издержек — делаю то же дешевле или быстрее</option>
+      <option value="trust">Внимание и доверие — меня выбирают и мне верят</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="ai">Дешёвый ИИ уже умеет это сам?</label>
+    <select id="ai">
+      <option value="">— выберите —</option>
+      <option value="full">Почти полностью</option>
+      <option value="part">Частично</option>
+      <option value="no">Нет</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="uniq">Это отличает вас от других?</label>
+    <select id="uniq">
+      <option value="">— выберите —</option>
+      <option value="uniq">Уникально — так мало кто может</option>
+      <option value="mid">Средне</option>
+      <option value="same">Как у всех</option>
+    </select>
+  </div>
+
+  <div class="row-actions">
+    <button class="btn btn--primary" id="calc">Показать направление</button>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Инструмент к рабочему листу «Фильтр трёх рычагов ценности» книги «Когда интеллект стал дешёвым»
+    (Том 1, гл. 2). <b>Это фильтр направления, не калькулятор денег:</b> ROI и экономию считайте отдельно
+    по своим данным. Код — MIT, данные не покидают браузер. Версия 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var LEVER={sales:'Новые продажи / рост',cost:'Экономия издержек',trust:'Внимание и доверие'};
+  document.getElementById('calc').onclick = function(){
+    var task=document.getElementById('task').value.trim();
+    var lever=document.getElementById('lever').value;
+    var ai=document.getElementById('ai').value;
+    var uniq=document.getElementById('uniq').value;
+    if(!lever||!ai||!uniq){
+      document.getElementById('out').innerHTML='<p style="color:#b45309;margin:.4rem 0">Выберите рычаг и оба ответа — тогда покажу направление.</p>';
+      return;
+    }
+    // verdict: output (дешевеет) / переходная зона / outcome (ваше)
+    var kind, tagCls, tagTxt, note, move;
+    var owns = (uniq==='uniq');
+    var aiDoes = (ai==='full');
+    if(lever==='cost' && (ai==='full'||ai==='part')){
+      kind='Становится базовой нормой'; tagCls='tag--mid'; tagTxt='экономия обнуляется у всех';
+      note='Экономия издержек дешевеет для всех сразу — это перестаёт быть отрывом и становится ожиданием по умолчанию. Делать стоит, но преимущество тут не построить.';
+      move='Автоматизируйте и высвободите время, а преимущество стройте на другом рычаге — на магии или на доверии.';
+    } else if(aiDoes && !owns){
+      kind='Это output — он дешевеет'; tagCls='tag--out'; tagTxt='output, commodity';
+      note='Дешёвый ИИ делает это сам, и вас это не отличает. Ценность такого артефакта падает — держать здесь своё преимущество опасно.';
+      move='Отдайте output ИИ, высвободите время и переложите его в outcome: постановку, суждение, доверие, распределение.';
+    } else if(owns && (lever==='sales'||lever==='trust')){
+      kind='Это ваш outcome — усиливайте'; tagCls='tag--own'; tagTxt='outcome, ваше';
+      note='Это редко и работает через магию или доверие — рычаги, которые дешёвый ИИ не обнуляет, а усиливает у того, у кого уже есть уникальное.';
+      move='Вкладывайтесь сюда: владение результатом, суждение/вкус, отношения и внимание. ИИ — усилитель под вами, не замена вам.';
+    } else {
+      kind='Переходная зона'; tagCls='tag--mid'; tagTxt='output + outcome';
+      note='Часть задачи дешевеет, часть держит вашу ценность. Решается тем, что вы отдадите ИИ, а что оставите за собой.';
+      move='Отдайте ИИ черновой output, а за собой оставьте суждение и проверку — и следите, чтобы уникальное не превратилось в «как у всех».';
+    }
+
+    var summary=
+      'ФИЛЬТР ТРЁХ РЫЧАГОВ — '+new Date().toISOString().slice(0,10)+'\n'+
+      'Задача: '+(task||'(не указана)')+'\n'+
+      'Рычаг: '+LEVER[lever]+'\n'+
+      'Дешёвый ИИ умеет: '+({full:'почти полностью',part:'частично',no:'нет'})[ai]+
+      ' · отличает меня: '+({uniq:'уникально',mid:'средне',same:'как у всех'})[uniq]+'\n'+
+      'Направление: '+kind+'\n'+
+      'Один ход: '+move;
+
+    document.getElementById('out').innerHTML=
+      '<div class="result">'+
+        '<div class="stat">'+
+          '<div><b>'+esc(kind)+'</b><span class="tag '+tagCls+'">'+tagTxt+'</span></div>'+
+          '<div><b>'+esc(LEVER[lever])+'</b><span>ваш рычаг</span></div>'+
+        '</div>'+
+        '<p style="margin:.2rem 0 .8rem">'+esc(note)+'</p>'+
+        '<p style="margin:.2rem 0 .2rem"><b>Один ход:</b> '+esc(move)+'</p>'+
+        '<ol class="q">'+
+          '<li>Что здесь <b>output</b> — отдать ИИ.</li>'+
+          '<li>Какой <b>outcome</b> оставить и укрепить за собой.</li>'+
+          '<li>Где следить, чтобы «уникально» не стало «как у всех».</li>'+
+        '</ol>'+
+        '<button class="btn" id="copy" style="margin-top:1rem">Копировать итог</button> '+
+        '<button class="btn" id="saveProfile" style="margin-top:1rem">💾 В мой профиль</button>'+
+        '<p class="profile-note">Хранится только в этом браузере, никуда не отправляется. <a href="../my-profile/tool.html">Мой профиль →</a></p>'+
+        '<pre id="sum">'+esc(summary)+'</pre>'+
+      '</div>';
+    document.getElementById('copy').onclick=function(){
+      navigator.clipboard && navigator.clipboard.writeText(summary);
+      this.textContent='Скопировано ✓';
+    };
+    document.getElementById('saveProfile').onclick=function(){
+      var ok=saveToProfile('value-levers-filter','Фильтр трёх рычагов',kind,note);
+      this.textContent = ok ? '✓ Сохранено' : 'Не удалось (приватный режим?)';
+      if(ok) this.disabled = true;
+    };
+    document.getElementById('out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

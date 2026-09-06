@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Трекер когнитивного долга — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Зеро-инстал инструмент к главе 8 («Когнитивный долг»). Один файл, без сети.
+  Логика — companion/docs/playbooks/cognitive-debt-checklist.md + research/concepts/cognitive-debt.md. Код: MIT.
+-->
+<style>
+  :root{
+    --bg:#fff;--fg:#0a0a0a;--muted:#71717a;--muted-bg:#f4f4f5;--border:#e4e4e7;
+    --primary:#4f46e5;--primary-d:#4338ca;--accent:#f59e0b;--green:#10b981;--red:#ef4444;--radius:.75rem;--radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:48rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.4rem}.privacy b{color:var(--green)}
+  .q{border:1px solid var(--border);border-radius:var(--radius);padding:.75rem 1rem;margin:.55rem 0}
+  .q p{margin:0 0 .5rem;font-size:.92rem}
+  .opts{display:flex;flex-wrap:wrap;gap:.4rem}
+  .opts label{font-size:.85rem;border:1px solid var(--border);border-radius:999px;padding:.3rem .8rem;cursor:pointer}
+  .opts input{margin-right:.35rem}
+  .opts label.y{border-color:var(--green)}
+  .opts label.n{border-color:var(--red)}
+  .fill{margin:.5rem 0}.fill label{display:block;font-size:.85rem;color:var(--muted);margin:.3rem 0 .2rem}
+  .fill input{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit;color:inherit;background:var(--bg)}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff;margin-top:1.4rem}
+  .btn--primary:hover{background:var(--primary-d)}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1.2rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result .big{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,3vw,1.8rem);letter-spacing:-.02em;margin:0 0 .3rem}
+  .move{margin:.9rem 0 0}.move label{display:block;font-size:.85rem;color:var(--muted);margin:.5rem 0 .25rem}
+  .move textarea{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit;color:inherit;background:var(--bg);min-height:3.5rem;resize:vertical}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .warn{border-left:3px solid var(--accent);background:rgba(245,158,11,.08);padding:.6rem .8rem;border-radius:.5rem;margin:.7rem 0;font-size:.88rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · глава 8</p>
+  <h1>Трекер когнитивного долга</h1>
+  <p class="lede">Когнитивный долг — когда вы берёте продуктивность сегодня в обмен на навык завтра.
+  Долг бывает осознанным выбором; плохо, когда он становится привычкой и вы этого не замечаете.
+  Отметьте по одной важной задаче, которую только что сделали с ИИ.</p>
+  <p class="privacy"><b>Данные остаются у вас:</b> всё считается в браузере.</p>
+
+  <div id="qs"></div>
+
+  <div class="q">
+    <p><b>Режим работы:</b> как вы чаще работаете с ИИ на важных задачах?</p>
+    <div class="opts" id="mode">
+      <label><input type="radio" name="mode" value="cyborg">делаю почти всё с ИИ, тесно переплетаю</label>
+      <label><input type="radio" name="mode" value="centaur">делю: часть — я, часть — ИИ, по чёткой границе</label>
+      <label><input type="radio" name="mode" value="auto">отдаю задачу целиком и беру результат</label>
+    </div>
+  </div>
+
+  <div class="fill">
+    <label>Какой навык я сегодня не тренировал, отдав его машине?</label>
+    <input type="text" id="skill" placeholder="напр.: сам не разобрался в логике, взял готовое">
+    <label>Где я намеренно оставил себе работу без ИИ?</label>
+    <input type="text" id="without" placeholder="напр.: черновик мысли пишу сам, ИИ — только правка">
+  </div>
+
+  <button class="btn btn--primary" id="calc">Посчитать долг и ход</button>
+  <div id="out"></div>
+
+  <footer>
+    Инструмент к чек-листу «Когнитивный долг» (глава 8). Применяйте к важным задачам и к слишком
+    гладкому «готово», а не к каждому запросу. Долг — не «вы плохо работаете», а сигнал вернуть трение.
+    <b>Не верьте — проверьте.</b> Код — MIT, данные не покидают браузер. Версия 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var Q=[
+    {k:'explain',t:'Я объяснил ход, а не просто выдал результат?'},
+    {k:'check',t:'Я проверил хотя бы один факт/источник вне модели?'},
+    {k:'repeat',t:'Я понимаю решение настолько, чтобы повторить его без ИИ?'},
+    {k:'stronger',t:'Я стал после этой задачи сильнее, а не только быстрее?'},
+    {k:'smooth',t:'«Готово» не слишком гладкое — я не пропустил ошибку из-за лени проверять?'}
+  ];
+  var box=document.getElementById('qs');
+  Q.forEach(function(d){
+    var el=document.createElement('div'); el.className='q';
+    el.innerHTML='<p>'+d.t+'</p><div class="opts">'+
+      '<label class="y"><input type="radio" name="'+d.k+'" value="y">да</label>'+
+      '<label class="n"><input type="radio" name="'+d.k+'" value="n">нет</label></div>';
+    box.appendChild(el);
+  });
+
+  document.getElementById('calc').onclick=function(){
+    var out=document.getElementById('out');
+    var picks=Q.map(function(d){ var r=document.querySelector('input[name="'+d.k+'"]:checked'); return {t:d.t, v:r?r.value:null}; });
+    if(picks.some(function(p){return !p.v;})){ out.innerHTML='<p class="warn">Ответьте на все пять вопросов (да/нет).</p>'; return; }
+    var no=picks.filter(function(p){return p.v==='n';}).length; // «нет» = сигнал долга
+    var mr=document.querySelector('input[name="mode"]:checked');
+    var mode=mr?mr.value:null;
+    var skill=document.getElementById('skill').value.trim();
+    var without=document.getElementById('without').value.trim();
+
+    var verdict, note;
+    if(no<=1){ verdict='Долг под контролем'; note='вы берёте скорость осознанно и держите трение. Так и продолжайте.'; }
+    else if(no<=3){ verdict='Долг накапливается'; note='часть навыка уходит машине незаметно. Пора вернуть трение на важных задачах.'; }
+    else { verdict='Долг стал привычкой'; note='вы почти не тренируете мышление на этой работе. Верните трение прежде, чем навык атрофируется.'; }
+
+    var prof = mode==='cyborg' ? 'Киборг (глубокая интеграция): сила — скорость, риск — незаметная потеря самостоятельного навыка. Сознательно оставляйте задачи, где работаете без ИИ.'
+      : mode==='centaur' ? 'Кентавр (чёткое разделение человек↔ИИ): самый устойчивый режим — вы держите границу «моё / машины». Проверяйте, что «моё» не сжимается со временем.'
+      : mode==='auto' ? 'Само-автоматизатор (отдаю целиком): максимальный риск долга — вы не видите ход решения. Хотя бы иногда разбирайте, как ИИ пришёл к результату.'
+      : '—';
+
+    var move = without ? ('усильте то, что уже делаете без ИИ: «'+without+'» — сделайте это правилом на неделю')
+      : (skill ? ('раз в неделю тренируйте навык, который сегодня отдали: «'+skill+'» — решите одну задачу без ИИ')
+      : 'выберите одну важную задачу в неделю и сделайте её без ИИ — чтобы навык не атрофировался');
+
+    var d=new Date();
+    var summary='КОГНИТИВНЫЙ ДОЛГ — '+d.toISOString().slice(0,10)+'\n'+
+      picks.map(function(p){return '• '+(p.v==='y'?'✓':'✗')+' '+p.t;}).join('\n')+
+      '\n«Нет»-ответов: '+no+'/5 → '+verdict+
+      (mode?'\nРежим: '+prof.split(':')[0]:'')+
+      (skill?'\nНе тренировал: '+skill:'')+(without?'\nБез ИИ: '+without:'')+
+      '\n\nХод: '+move;
+
+    out.innerHTML='<div class="result">'+
+      '<p class="big">'+verdict+' · '+no+'/5 «нет»</p>'+
+      '<p style="margin:.1rem 0 .5rem;color:var(--muted)">'+note+'</p>'+
+      (mode?'<p style="margin:.2rem 0"><b>Ваш режим:</b> '+prof+'</p>':'')+
+      '<div class="move"><label>Один ход «верни трение» (своими словами):</label>'+
+        '<textarea id="mv">'+move+'</textarea></div>'+
+      '<div class="warn">Долг бывает осознанным (ок). Плохо — когда он привычка. Один ход, не пять.</div>'+
+      '<button class="btn" id="copy">Копировать итог</button> '+
+      '<button class="btn" id="saveProfile">💾 В мой профиль</button>'+
+      '<p class="profile-note">Хранится только в этом браузере, никуда не отправляется. <a href="../my-profile/tool.html">Мой профиль →</a></p>'+
+      '<pre id="sum"></pre></div>';
+    function render(){ var mv=document.getElementById('mv').value; var s=summary.replace(/Ход: .*/,'Ход: '+mv); document.getElementById('sum').textContent=s; return s; }
+    render();
+    document.getElementById('mv').oninput=render;
+    document.getElementById('copy').onclick=function(){ navigator.clipboard&&navigator.clipboard.writeText(render()); this.textContent='Скопировано ✓'; };
+    document.getElementById('saveProfile').onclick=function(){
+      var score=verdict+' · '+no+'/5';
+      var ok=saveToProfile('cognitive-debt-check','Трекер когнитивного долга',score,note);
+      this.textContent = ok ? '✓ Сохранено' : 'Не удалось (приватный режим?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

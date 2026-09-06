@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мой профиль — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Local-first профиль Практикума. Один файл, без зависимостей и сети: читает результаты,
+  которые инструменты сохранили в localStorage этого браузера. Ничего никуда не отправляет.
+  Лицензия кода: MIT. Контракт хранения: ключ "praktikum.profile.v1".
+-->
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  h2{font-family:var(--display);font-size:1.05rem;margin:1.8rem 0 .6rem}
+  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;font-size:.9rem}
+  th,td{padding:.5rem .55rem;border-top:1px solid var(--border);text-align:left;vertical-align:middle}
+  thead th{background:var(--muted-bg);border-top:none;font-size:.78rem;color:var(--muted);font-weight:600}
+  a{color:var(--primary)}
+  .done{color:var(--green);font-weight:600}
+  .todo{color:var(--muted)}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;
+    transition:transform .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .btn--danger:hover{border-color:var(--red);color:var(--red)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.2rem 0}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result b.big{display:block;font-family:var(--display);font-size:clamp(1.3rem,3vw,1.8rem);
+    letter-spacing:-.02em;line-height:1.15;margin-bottom:.35rem}
+  textarea{width:100%;min-height:12rem;border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;
+    color:inherit;background:var(--bg)}
+  .hint{color:var(--muted);font-size:.82rem;margin:.2rem 0 1rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · мой профиль</p>
+  <h1>Мой профиль адаптации</h1>
+  <p class="lede">Пройденные инструменты Практикума, ваш этап на <a href="../../tracks/">маршруте зрелости</a>
+    и один следующий шаг. Профиль наполняется кнопкой «💾 В мой профиль» внутри каждого инструмента.</p>
+  <p class="privacy"><b>Приватность:</b> всё хранится <b>только в этом браузере</b> (localStorage) и
+    никуда не отправляется — ни автору, ни третьим лицам. Очистите данные сайта — профиль исчезнет.
+    Кнопка «Сбросить» удаляет его сразу.</p>
+
+  <noscript><p>Для профиля нужен JavaScript. Без него всё содержимое Практикума доступно как обычно:
+    <a href="../../tracks/">маршрут зрелости</a> · <a href="../../tools/">каталог инструментов</a>.</p></noscript>
+
+  <div id="stage" class="result"></div>
+
+  <h2>Инструменты</h2>
+  <table>
+    <thead><tr><th>Инструмент</th><th>Этап</th><th>Статус</th><th>Итог</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="hint">Этапы 0 и 4 — без браузерных инструментов: этап 0 — <a href="../../start/">старт</a> и
+    <a href="../../method/">карта метода</a>; этап 4 — <a href="../../playbooks/change-gates/">гейты</a>
+    и <a href="../../playbooks/eval-set-builder/">эталонные наборы</a>.</p>
+
+  <section id="trustLayer" hidden>
+    <h2>Слой доверия</h2>
+    <div class="result" id="trustResult"></div>
+    <p class="hint">Это не этап зрелости: Компас доверия помогает заранее назвать второй канал,
+      независимую опору и дату повторной проверки для дорогих решений.</p>
+  </section>
+
+  <div class="row-actions">
+    <button class="btn btn--primary" id="export">Экспорт в Markdown</button>
+    <button class="btn" id="copy" hidden>Копировать</button>
+    <button class="btn btn--danger" id="reset">Сбросить профиль</button>
+  </div>
+  <textarea id="md" hidden readonly></textarea>
+  <p class="hint" id="exporthint" hidden>Скопируйте и вставьте в заметки — или отдайте своему
+    ИИ-ассистенту вместе с промптом из «Мой итог одной страницей» в
+    <a href="../../playbooks/tom1-workbook/">тетради Тома 1</a>.</p>
+
+  <footer>Часть Практикума «Когда интеллект стал дешёвым» · данные не покидают ваш браузер · MIT ·
+    <a href="../../tracks/">маршрут зрелости</a> · <a href="./">об этом инструменте</a> ·
+    Версия: 2026-08-11</footer>
+</div>
+<script>
+(function(){
+  "use strict";
+  var KEY="praktikum.profile.v1";
+  var TOOLS=[
+    {slug:"value-levers-filter",   title:"Фильтр трёх рычагов",        stage:1},
+    {slug:"week-inventory",        title:"Инвентаризация недели",      stage:1},
+    {slug:"usefulness-level-check",title:"Мой уровень полезности",     stage:1},
+    {slug:"five-deficits-audit",   title:"Аудит пяти дефицитов",       stage:1},
+    {slug:"cognitive-debt-check",  title:"Трекер когнитивного долга",  stage:1},
+    {slug:"personal-harness-builder",title:"Сборщик личного харнесса", stage:2},
+    {slug:"weak-multiplier-canvas",title:"Канвас слабого множителя",   stage:2},
+    {slug:"ai-native-maturity-check",title:"Тест зрелости процесса",   stage:3},
+    {slug:"visible-to-agent",      title:"Виден ли я агенту",          stage:3}
+  ];
+  var STAGE_NAMES={1:"Этап 1 — разобрать свою работу",2:"Этап 2 — собрать систему и первый ход",
+    3:"Этап 3 — команда и процессы"};
+  function load(){
+    try{var raw=localStorage.getItem(KEY);var p=raw?JSON.parse(raw):null;
+      return (p&&p.tools)?p:{savedAt:"",tools:{}};}
+    catch(e){return {savedAt:"",tools:{}};}
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+  function render(){
+    var p=load(),rows="",doneByStage={1:0,2:0,3:0},totalByStage={1:0,2:0,3:0};
+    TOOLS.forEach(function(t){
+      totalByStage[t.stage]++;
+      var r=p.tools[t.slug];
+      if(r)doneByStage[t.stage]++;
+      rows+="<tr><td><a href=\"../"+t.slug+"/tool.html\">"+esc(t.title)+"</a></td>"+
+        "<td>"+t.stage+"</td>"+
+        (r?"<td class=\"done\">✓ "+esc(r.date||"")+"</td><td>"+esc(r.score||"")+
+           (r.summary?" — "+esc(r.summary):"")+"</td>"
+          :"<td class=\"todo\">не пройден</td><td class=\"todo\">—</td>")+"</tr>";
+    });
+    document.getElementById("rows").innerHTML=rows;
+    var cur=1;
+    if(doneByStage[1]>=totalByStage[1])cur=2;
+    if(cur===2&&doneByStage[2]>=totalByStage[2])cur=3;
+    if(cur===3&&doneByStage[3]>=totalByStage[3])cur=4;
+    var savedCount=TOOLS.filter(function(t){return !!p.tools[t.slug];}).length,html="";
+    if(savedCount===0){
+      html="<b class=\"big\">Профиль пока пуст</b>"+
+        "Пройдите любой инструмент и нажмите в нём «💾 В мой профиль». Не знаете, с чего начать, — "+
+        "<a href=\"../../tracks/\">маршрут зрелости</a> подскажет ваш этап; обычно первый ход — "+
+        "<a href=\"../week-inventory/tool.html\">инвентаризация недели</a>.";
+    }else if(cur===4){
+      html="<b class=\"big\">Инструментальные этапы пройдены ("+savedCount+" из "+TOOLS.length+")</b>"+
+        "Дальше — этап 4: изменения по гейтам. Следующий шаг: "+
+        "<a href=\"../../playbooks/eval-set-builder/\">эталонный набор</a> и "+
+        "<a href=\"../../playbooks/change-gates/\">лист гейтов</a>. Инструменты стоит перепроходить "+
+        "раз в полгода — корзины ползут.";
+    }else{
+      var next=null;
+      for(var i=0;i<TOOLS.length;i++){
+        if(TOOLS[i].stage===cur&&!p.tools[TOOLS[i].slug]){next=TOOLS[i];break;}
+      }
+      html="<b class=\"big\">"+esc(STAGE_NAMES[cur])+"</b>"+
+        "Пройдено инструментов: "+savedCount+" из "+TOOLS.length+
+        " (на этом этапе: "+doneByStage[cur]+" из "+totalByStage[cur]+").";
+      if(next){html+=" <br>Один следующий шаг: <a href=\"../"+next.slug+"/tool.html\">"+
+        esc(next.title)+" →</a>";}
+      html+="<br><span style=\"color:var(--muted);font-size:.85rem\">Что означает этап и когда переходить дальше — "+
+        "<a href=\"../../tracks/\">маршрут зрелости</a>.</span>";
+    }
+    document.getElementById("stage").innerHTML=html;
+
+    var trust=p.tools["trust-compass"];
+    var trustLayer=document.getElementById("trustLayer");
+    if(trust){
+      trustLayer.hidden=false;
+      document.getElementById("trustResult").innerHTML=
+        "<b class=\"big\">Компас доверия собран</b>"+
+        "<p>"+esc(trust.summary||"Проверьте, что второй канал и независимая опора всё ещё работают.")+"</p>"+
+        "<p><a href=\"../trust-compass/tool.html\">Открыть и пересмотреть Компас доверия →</a></p>";
+    }else{trustLayer.hidden=true;}
+  }
+  document.getElementById("export").addEventListener("click",function(){
+    var p=load(),d=new Date().toISOString().slice(0,10);
+    var md="# Мой профиль Практикума «Когда интеллект стал дешёвым»\n\nДата экспорта: "+d+
+      "\n\n| Инструмент | Этап | Пройден | Итог |\n|---|---|---|---|\n";
+    TOOLS.forEach(function(t){
+      var r=p.tools[t.slug];
+      md+="| "+t.title+" | "+t.stage+" | "+(r?(r.date||"да"):"нет")+" | "+
+        (r?String(r.score||"")+(r.summary?" — "+String(r.summary):""):"—")+" |\n";
+    });
+    var trust=p.tools["trust-compass"];
+    md+="\n## Слой доверия\n\n"+(trust
+      ? "- Компас доверия: "+(trust.date||"да")+" · "+(trust.summary||"без краткого итога")+"\n"
+      : "- Компас доверия: не собран\n");
+    md+="\nПрофиль хранится локально в браузере читателя; экспорт сделан вручную.\n";
+    var ta=document.getElementById("md");
+    ta.value=md;ta.hidden=false;
+    document.getElementById("copy").hidden=false;
+    document.getElementById("exporthint").hidden=false;
+    ta.focus();ta.select();
+  });
+  document.getElementById("copy").addEventListener("click",function(){
+    var ta=document.getElementById("md");ta.focus();ta.select();
+    try{navigator.clipboard.writeText(ta.value);this.textContent="✓ Скопировано";}
+    catch(e){document.execCommand("copy");this.textContent="✓ Скопировано";}
+  });
+  document.getElementById("reset").addEventListener("click",function(){
+    if(confirm("Удалить профиль из этого браузера? Действие необратимо.")){
+      try{localStorage.removeItem(KEY);}catch(e){}
+      document.getElementById("md").hidden=true;
+      document.getElementById("copy").hidden=true;
+      document.getElementById("exporthint").hidden=true;
+      render();
+    }
+  });
+  render();
+})();
+</script>
+</body>
+</html>

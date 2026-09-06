@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cognitive debt tracker - Practicum "When Intelligence Became Cheap"</title>
+
+<style>
+  :root{
+    --bg:#fff;--fg:#0a0a0a;--muted:#71717a;--muted-bg:#f4f4f5;--border:#e4e4e7;
+    --primary:#4f46e5;--primary-d:#4338ca;--accent:#f59e0b;--green:#10b981;--red:#ef4444;--radius:.75rem;--radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:48rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.4rem}.privacy b{color:var(--green)}
+  .q{border:1px solid var(--border);border-radius:var(--radius);padding:.75rem 1rem;margin:.55rem 0}
+  .q p{margin:0 0 .5rem;font-size:.92rem}
+  .opts{display:flex;flex-wrap:wrap;gap:.4rem}
+  .opts label{font-size:.85rem;border:1px solid var(--border);border-radius:999px;padding:.3rem .8rem;cursor:pointer}
+  .opts input{margin-right:.35rem}
+  .opts label.y{border-color:var(--green)}
+  .opts label.n{border-color:var(--red)}
+  .fill{margin:.5rem 0}.fill label{display:block;font-size:.85rem;color:var(--muted);margin:.3rem 0 .2rem}
+  .fill input{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit;color:inherit;background:var(--bg)}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff;margin-top:1.4rem}
+  .btn--primary:hover{background:var(--primary-d)}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1.2rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result .big{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,3vw,1.8rem);letter-spacing:-.02em;margin:0 0 .3rem}
+  .move{margin:.9rem 0 0}.move label{display:block;font-size:.85rem;color:var(--muted);margin:.5rem 0 .25rem}
+  .move textarea{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;font:inherit;color:inherit;background:var(--bg);min-height:3.5rem;resize:vertical}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .warn{border-left:3px solid var(--accent);background:rgba(245,158,11,.08);padding:.6rem .8rem;border-radius:.5rem;margin:.7rem 0;font-size:.88rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · chapter 8</p>
+  <h1>Cognitive debt tracker</h1>
+  <p class="lede">Cognitive debt means gaining speed today at the cost of skill tomorrow. That trade can be deliberate. The problem starts when it becomes a habit you no longer notice. Use one important task you have just completed with AI.</p>
+  <p class="privacy"><b>Your data stays with you:</b> everything runs in your browser.</p>
+
+  <div id="qs"></div>
+
+  <div class="q">
+    <p><b>Work mode:</b> How do you usually use AI on important tasks?</p>
+    <div class="opts" id="mode">
+      <label><input type="radio" name="mode" value="cyborg">I do almost everything with AI and work closely with it</label>
+      <label><input type="radio" name="mode" value="centaur">I split the work between myself and AI along a clear boundary</label>
+      <label><input type="radio" name="mode" value="auto">I hand over the whole task and take the result</label>
+    </div>
+  </div>
+
+  <div class="fill">
+    <label>Which skill did I skip practicing by handing it to AI today?</label>
+    <input type="text" id="skill" placeholder="for example, I took the answer without working through the logic">
+    <label>Where did I deliberately keep part of the work AI-free?</label>
+    <input type="text" id="without" placeholder="for example, I draft the idea myself and use AI only for editing">
+  </div>
+
+  <button class="btn btn--primary" id="calc">Check the debt and choose a move</button>
+  <div id="out"></div>
+
+  <footer>
+    Companion tool for the "Cognitive debt" checklist (chapter 8). Use it for important work and for results that feel suspiciously effortless, not for every prompt. Debt does not mean you work badly. It tells you where to bring useful effort back.
+    <b>Do not take the score on faith. Check it against real work.</b> The code is MIT licensed. Your data never leaves the browser. Version 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var Q=[
+    {k:'explain',t:'Did I explain the reasoning instead of only giving the result?'},
+    {k:'check',t:'Did I check at least one fact or source outside the model?'},
+    {k:'repeat',t:'Do I understand the solution well enough to repeat it without AI?'},
+    {k:'stronger',t:'Did this task improve my capability, or only my speed?'},
+    {k:'smooth',t:'Did the result feel too easy? Could I have missed an error because I did not want to check?'}
+  ];
+  var box=document.getElementById('qs');
+  Q.forEach(function(d){
+    var el=document.createElement('div'); el.className='q';
+    el.innerHTML='<p>'+d.t+'</p><div class="opts">'+
+      '<label class="y"><input type="radio" name="'+d.k+'" value="y">yes</label>'+
+      '<label class="n"><input type="radio" name="'+d.k+'" value="n">no</label></div>';
+    box.appendChild(el);
+  });
+
+  document.getElementById('calc').onclick=function(){
+    var out=document.getElementById('out');
+    var picks=Q.map(function(d){ var r=document.querySelector('input[name="'+d.k+'"]:checked'); return {t:d.t, v:r?r.value:null}; });
+    if(picks.some(function(p){return !p.v;})){ out.innerHTML='<p class="warn">Answer all five yes-or-no questions.</p>'; return; }
+    var no=picks.filter(function(p){return p.v==='n';}).length;
+    var mr=document.querySelector('input[name="mode"]:checked');
+    var mode=mr?mr.value:null;
+    var skill=document.getElementById('skill').value.trim();
+    var without=document.getElementById('without').value.trim();
+
+    var verdict, note;
+    if(no<=1){ verdict='Debt under control'; note='You are choosing speed deliberately and keeping enough useful effort in the work. Keep doing that.'; }
+    else if(no<=3){ verdict='Debt is building'; note='Part of the skill is quietly moving to the machine. Bring useful effort back into important tasks.'; }
+    else { verdict='Debt has become a habit'; note='This work now gives your thinking almost no practice. Bring useful effort back before the skill fades.'; }
+
+    var prof = mode==='cyborg' ? 'Cyborg (deep integration): the strength is speed. The risk is losing an independent skill without noticing. Deliberately keep some tasks AI-free.'
+      : mode==='centaur' ? 'Centaur (clear human and AI split): you keep a firm boundary between your work and the machine\'s work. Check that your side does not shrink over time.'
+      : mode==='auto' ? 'Self-automator (full handoff): the debt risk is highest because you cannot see how the answer was produced. Sometimes work through how AI reached the result.'
+      : '-';
+
+    var move = without ? ('strengthen what you already do without AI: "'+without+'". Make it a rule for one week')
+      : (skill ? ('once a week, practice the skill you handed over today: "'+skill+'". Complete one task without AI')
+      : 'choose one important task each week and do it without AI so the skill stays active');
+
+    var d=new Date();
+    var summary='COGNITIVE DEBT | '+d.toISOString().slice(0,10)+'\n'+
+      picks.map(function(p){return '• '+(p.v==='y'?'✓':'✗')+' '+p.t;}).join('\n')+
+      '\nNo answers: '+no+'/5 → '+verdict+
+      (mode?'\nMode: '+prof.split(':')[0]:'')+
+      (skill?'\nSkill not practiced: '+skill:'')+(without?'\nWithout AI: '+without:'')+
+      '\n\nMove: '+move;
+
+    out.innerHTML='<div class="result">'+
+      '<p class="big">'+verdict+' · '+no+'/5 "no"</p>'+
+      '<p style="margin:.1rem 0 .5rem;color:var(--muted)">'+note+'</p>'+
+      (mode?'<p style="margin:.2rem 0"><b>Your mode:</b> '+prof+'</p>':'')+
+      '<div class="move"><label>One move to bring useful effort back, in your own words:</label>'+
+        '<textarea id="mv">'+move+'</textarea></div>'+
+      '<div class="warn">Debt can be a deliberate trade. The problem is when it becomes a habit. Choose one move, not five.</div>'+
+      '<button class="btn" id="copy">Copy result</button> '+
+      '<button class="btn" id="saveProfile">💾 Save to My Profile</button>'+
+      '<p class="profile-note">Saved only in this browser. Nothing is sent anywhere. <a href="../my-profile/tool.html">My Profile →</a></p>'+
+      '<pre id="sum"></pre></div>';
+    function render(){ var mv=document.getElementById('mv').value; var s=summary.replace(/Move: .*/,'Move: '+mv); document.getElementById('sum').textContent=s; return s; }
+    render();
+    document.getElementById('mv').oninput=render;
+    document.getElementById('copy').onclick=function(){ navigator.clipboard&&navigator.clipboard.writeText(render()); this.textContent='Copied ✓'; };
+    document.getElementById('saveProfile').onclick=function(){
+      var score=verdict+' · '+no+'/5';
+      var ok=saveToProfile('cognitive-debt-check','Cognitive debt tracker',score,note);
+      this.textContent = ok ? '✓ Saved' : 'Could not save (private mode?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

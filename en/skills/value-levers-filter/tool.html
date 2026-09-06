@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three value levers filter - Practicum "When Intelligence Became Cheap"</title>
+
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  .field{margin:0 0 1.1rem}
+  .field>label{display:block;font-weight:600;font-size:.92rem;margin:0 0 .35rem}
+  input[type=text],select{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  select{max-width:34rem}
+  .box{border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin:0 0 1.1rem}
+  .box h2{font-family:var(--display);font-size:1.02rem;margin:0 0 .5rem;letter-spacing:-.01em}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:.4rem 0 1.8rem}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .stat{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 1rem}
+  .stat>div{min-width:8rem}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;line-height:1.05;letter-spacing:-.02em}
+  .stat span{display:block;color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  .tag{display:inline-block;font-family:var(--display);font-weight:600;font-size:.8rem;padding:.15rem .6rem;
+    border-radius:999px;margin-top:.2rem}
+  .tag--out{background:rgba(239,68,68,.12);color:#b91c1c}
+  .tag--mid{background:rgba(245,158,11,.14);color:#b45309}
+  .tag--own{background:rgba(16,185,129,.14);color:#047857}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .q{margin:1rem 0 0;padding-left:1.1rem}
+  .q li{margin:.3rem 0}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · Volume 1 · chapter 2</p>
+  <h1>Three value levers filter</h1>
+  <p class="lede">Choose <b>one</b> task or product. Which lever creates its value, and can cheap AI erase that advantage? This filter shows a direction, not a dollar amount.</p>
+  <p class="privacy"><b>Your data stays with you:</b> the calculation runs in your browser, and nothing is sent anywhere.</p>
+
+  <div class="field">
+    <label for="task">Task or product (one only)</label>
+    <input type="text" id="task" placeholder="for example, write standard sales proposals">
+  </div>
+
+  <div class="field">
+    <label for="lever">Main value lever</label>
+    <select id="lever">
+      <option value="">Choose one</option>
+      <option value="sales">New sales or growth: I can do what others cannot</option>
+      <option value="cost">Cost savings: I do the same work faster or at lower cost</option>
+      <option value="trust">Attention and trust: people choose me and trust me</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="ai">Can cheap AI already do this on its own?</label>
+    <select id="ai">
+      <option value="">Choose one</option>
+      <option value="full">Almost completely</option>
+      <option value="part">Partly</option>
+      <option value="no">No</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="uniq">Does this set you apart?</label>
+    <select id="uniq">
+      <option value="">Choose one</option>
+      <option value="uniq">Distinctive: few others can do it</option>
+      <option value="mid">Somewhat</option>
+      <option value="same">About the same as everyone else</option>
+    </select>
+  </div>
+
+  <div class="row-actions">
+    <button class="btn btn--primary" id="calc">Show the direction</button>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Companion tool for the "Three value levers filter" worksheet in When Intelligence Became Cheap, Volume 1, chapter 2. <b>This is a direction filter, not a financial calculator:</b> calculate ROI and savings separately with your own data. The code is MIT licensed. Your data never leaves the browser. Version 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var LEVER={sales:'New sales / growth',cost:'Cost savings',trust:'Attention and trust'};
+  document.getElementById('calc').onclick = function(){
+    var task=document.getElementById('task').value.trim();
+    var lever=document.getElementById('lever').value;
+    var ai=document.getElementById('ai').value;
+    var uniq=document.getElementById('uniq').value;
+    if(!lever||!ai||!uniq){
+      document.getElementById('out').innerHTML='<p style="color:#b45309;margin:.4rem 0">Choose a lever and answer both questions to see the direction.</p>';
+      return;
+    }
+
+    var kind, tagCls, tagTxt, note, move;
+    var owns = (uniq==='uniq');
+    var aiDoes = (ai==='full');
+    if(lever==='cost' && (ai==='full'||ai==='part')){
+      kind='Becoming the baseline'; tagCls='tag--mid'; tagTxt='the savings spread to everyone';
+      note='AI lowers this cost for everyone at once. The saving stops being an edge and becomes the default expectation. It is still worth doing, but it will not sustain an advantage.';
+      move='Automate it and free up time. Build your advantage on another lever, such as a capability others cannot match or trust they cannot copy.';
+    } else if(aiDoes && !owns){
+      kind='This output is getting cheaper'; tagCls='tag--out'; tagTxt='output, commodity';
+      note='Cheap AI can do this on its own, so the work no longer sets you apart. The artifact is losing value. Do not build your advantage around it.';
+      move='Hand the output to AI and move your time into the outcome: framing, judgment, trust, and distribution.';
+    } else if(owns && (lever==='sales'||lever==='trust')){
+      kind='This is your outcome. Strengthen it'; tagCls='tag--own'; tagTxt='outcome, yours';
+      note='This is rare and depends on a capability or trust that cheap AI cannot erase. AI can amplify it when you already have something distinctive.';
+      move='Invest here: outcome ownership, judgment, taste, relationships, and attention. Use AI as leverage under your control, not as your replacement.';
+    } else {
+      kind='Transition zone'; tagCls='tag--mid'; tagTxt='output + outcome';
+      note='Part of the task is getting cheaper, while another part still carries your value. Decide what AI should do and what you should keep.';
+      move='Give draft output to AI, but keep judgment and review. Watch for the distinctive part becoming ordinary.';
+    }
+
+    var summary=
+      'THREE VALUE LEVERS FILTER | '+new Date().toISOString().slice(0,10)+'\n'+
+      'Task: '+(task||'(not provided)')+'\n'+
+      'Lever: '+LEVER[lever]+'\n'+
+      'Cheap AI can do it: '+({full:'almost completely',part:'partly',no:'no'})[ai]+
+      ' · sets me apart: '+({uniq:'distinctive',mid:'somewhat',same:'about the same'})[uniq]+'\n'+
+      'Direction: '+kind+'\n'+
+      'One move: '+move;
+
+    document.getElementById('out').innerHTML=
+      '<div class="result">'+
+        '<div class="stat">'+
+          '<div><b>'+esc(kind)+'</b><span class="tag '+tagCls+'">'+tagTxt+'</span></div>'+
+          '<div><b>'+esc(LEVER[lever])+'</b><span>your lever</span></div>'+
+        '</div>'+
+        '<p style="margin:.2rem 0 .8rem">'+esc(note)+'</p>'+
+        '<p style="margin:.2rem 0 .2rem"><b>One move:</b> '+esc(move)+'</p>'+
+        '<ol class="q">'+
+          '<li>Which <b>output</b> can you hand to AI?</li>'+
+          '<li>Which <b>outcome</b> should you keep and strengthen?</li>'+
+          '<li>Where could distinctive work become ordinary?</li>'+
+        '</ol>'+
+        '<button class="btn" id="copy" style="margin-top:1rem">Copy result</button> '+
+        '<button class="btn" id="saveProfile" style="margin-top:1rem">💾 Save to My Profile</button>'+
+        '<p class="profile-note">Saved only in this browser. Nothing is sent anywhere. <a href="../my-profile/tool.html">My Profile →</a></p>'+
+        '<pre id="sum">'+esc(summary)+'</pre>'+
+      '</div>';
+    document.getElementById('copy').onclick=function(){
+      navigator.clipboard && navigator.clipboard.writeText(summary);
+      this.textContent='Copied ✓';
+    };
+    document.getElementById('saveProfile').onclick=function(){
+      var ok=saveToProfile('value-levers-filter','Three value levers filter',kind,note);
+      this.textContent = ok ? '✓ Saved' : 'Could not save (private mode?)';
+      if(ok) this.disabled = true;
+    };
+    document.getElementById('out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

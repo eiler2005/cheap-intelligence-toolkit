@@ -1,0 +1,13 @@
+# https://github.com/eiler2005/cheap-intelligence-toolkit
+
+The toolkit for the book series "When Intelligence Became Cheap" by Denis Ermilov.
+Generated from the Practicum at https://cheap-intelligence.vercel.app; that site is canonical and always newer.
+
+- packs/ — every material for one book as a single file, for loading into an assistant
+- playbooks/ — worksheets
+- prompts/ — the prompt bank
+- skills/ — SKILL.md files and browser tools
+- docs/ — START, HOW-TO-USE, MAP
+- en/ — the same in English, draft translation
+
+Practicum version 1.2.0. Live pages are not mirrored here: read them at https://cheap-intelligence.vercel.app/watch.

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Инвентаризация недели — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Зеро-инстал инструмент к главе 3 книги «Когда интеллект стал дешёвым». Один файл, без зависимостей и сети:
+  все расчёты — в браузере, данные никуда не уходят. Лицензия кода: MIT.
+  Логика — рабочий лист companion/docs/playbooks/week-inventory.md (корзины задач + рычаги).
+-->
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;font-size:.9rem}
+  th,td{padding:.5rem .55rem;border-top:1px solid var(--border);text-align:left;vertical-align:middle}
+  thead th{background:var(--muted-bg);border-top:none;font-size:.78rem;color:var(--muted);font-weight:600}
+  td input[type=text]{width:100%;border:1px solid var(--border);border-radius:.45rem;padding:.4rem .5rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  td input[type=number]{width:4.2rem;border:1px solid var(--border);border-radius:.45rem;padding:.4rem .4rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  select{border:1px solid var(--border);border-radius:.45rem;padding:.4rem .4rem;font:inherit;background:var(--bg);color:inherit}
+  .num{color:var(--muted);font-variant-numeric:tabular-nums;width:1.6rem;text-align:center}
+  .x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;line-height:1;padding:.2rem .3rem;border-radius:.4rem}
+  .x:hover{color:var(--red);background:var(--muted-bg)}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0 1.8rem}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .stat{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 1rem}
+  .stat>div{min-width:8rem}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:700;
+    line-height:1;letter-spacing:-.02em}
+  .stat span{display:block;color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  .bar{height:.55rem;border-radius:999px;background:var(--border);overflow:hidden;margin:.3rem 0 1rem;max-width:32rem}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .q{margin:1.6rem 0 0;padding-left:1.1rem}
+  .q li{margin:.3rem 0;color:var(--fg)}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .hint{color:var(--muted);font-size:.82rem;margin:.2rem 0 1rem}
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .table-scroll table{min-width:34rem}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+  @media(max-width:640px){
+    td input[type=text]{min-width:7rem}
+    .stat>div{min-width:6.5rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · глава 3</p>
+  <h1>Инвентаризация одной недели</h1>
+  <p class="lede">Выпишите задачи прошлой недели как есть — по календарю и переписке, а не по
+  должностной инструкции. Разложите по корзинам и посмотрите свою личную экспозицию.</p>
+  <p class="privacy"><b>Данные остаются у вас:</b> расчёт идёт в браузере, ничего никуда не отправляется.</p>
+
+  <div class="table-scroll"><table id="tbl">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th style="width:38%">Задача (конкретно)</th>
+        <th>Часов</th>
+        <th>Корзина</th>
+        <th>Рычаг</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+  <p class="hint">Корзина: 🟢 «ИИ сам» · 🟡 «человек + ИИ» · 🔴 «только человек». Рычаг (гл. 2):
+  ① новые деньги · ② экономия · ③ внимание/доверие · «—» ни один (это занятость, не ценность).</p>
+
+  <div class="row-actions">
+    <button class="btn" id="add">+ Задача</button>
+    <button class="btn btn--primary" id="calc">Посчитать экспозицию</button>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Инструмент к рабочему листу «Инвентаризация недели» книги «Когда интеллект стал дешёвым» (глава 3).
+    Корзины ползут — пересматривайте раз в полгода. <b>Не верьте — проверьте:</b> это карта вашей
+    недели, а не оценка профессии. Код — MIT, данные не покидают браузер. Версия 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var rows = document.getElementById('rows');
+  function row(i){
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="num"></td>'+
+      '<td><input type="text" placeholder="напр. свёл таблицу для руководства"></td>'+
+      '<td><input type="number" min="0" step="0.5" placeholder="ч"></td>'+
+      '<td><select class="bucket"><option value="">—</option>'+
+        '<option value="g">🟢 ИИ сам</option><option value="y">🟡 чел.+ИИ</option>'+
+        '<option value="r">🔴 только чел.</option></select></td>'+
+      '<td><select class="lever"><option value="">—</option>'+
+        '<option value="1">① деньги</option><option value="2">② экономия</option>'+
+        '<option value="3">③ внимание</option><option value="x">— нет</option></select></td>'+
+      '<td><button class="x" title="Убрать">✕</button></td>';
+    tr.querySelector('.x').onclick = function(){ tr.remove(); renumber(); };
+    return tr;
+  }
+  function renumber(){
+    [].forEach.call(rows.children, function(tr,idx){ tr.querySelector('.num').textContent = idx+1; });
+    if(!rows.children.length) addRow();
+  }
+  function addRow(){ rows.appendChild(row()); renumber(); }
+  document.getElementById('add').onclick = addRow;
+  for(var k=0;k<4;k++) addRow();
+
+  function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  document.getElementById('calc').onclick = function(){
+    var data = [];
+    [].forEach.call(rows.children, function(tr){
+      var task = tr.querySelector('input[type=text]').value.trim();
+      var h = parseFloat(tr.querySelector('input[type=number]').value)||0;
+      var b = tr.querySelector('.bucket').value;
+      var l = tr.querySelector('.lever').value;
+      if(task || h || b) data.push({task:task,h:h,b:b,l:l});
+    });
+    var out = document.getElementById('out');
+    if(!data.length){ out.innerHTML = '<p class="hint">Добавьте хотя бы одну задачу с корзиной и часами.</p>'; return; }
+    var total=0, gy=0, g=0, dash=0, unrated=0;
+    data.forEach(function(d){
+      total+=d.h;
+      if(d.b==='g'||d.b==='y') gy+=d.h;
+      if(d.b==='g') g+=d.h;
+      if(!d.b) unrated++;
+      if(d.l==='x') dash++;
+    });
+    var pctGY = total? Math.round(gy/total*100):0;
+    var pctG = total? Math.round(g/total*100):0;
+    var summary =
+      'ИНВЕНТАРИЗАЦИЯ НЕДЕЛИ — '+new Date().toISOString().slice(0,10)+'\n'+
+      'Задач: '+data.length+' · часов: '+total+'\n'+
+      'Экспозиция (🟢+🟡): '+pctGY+'% времени · из них 🟢: '+pctG+'%\n'+
+      'Задач с рычагом «—» (занятость, не ценность): '+dash+'\n\n'+
+      data.map(function(d,i){
+        var bn={g:'🟢',y:'🟡',r:'🔴'}[d.b]||'·';
+        var ln={'1':'① деньги','2':'② экономия','3':'③ внимание','x':'— нет'}[d.l]||'·';
+        return (i+1)+'. '+(d.task||'(без названия)')+' — '+bn+' · '+d.h+'ч · '+ln;
+      }).join('\n');
+
+    out.innerHTML =
+      '<div class="result">'+
+        '<div class="stat">'+
+          '<div><b>'+pctGY+'%</b><span>времени в 🟢+🟡 — ваша экспозиция</span></div>'+
+          '<div><b>'+pctG+'%</b><span>в 🟢 «ИИ сам»</span></div>'+
+          '<div><b>'+dash+'</b><span>задач с рычагом «—»</span></div>'+
+        '</div>'+
+        '<div class="bar"><i style="width:'+pctGY+'%"></i></div>'+
+        (unrated? '<p class="hint">'+unrated+' задач без корзины — они не учтены в проценте.</p>':'')+
+        '<p style="margin:.2rem 0 .4rem">Три вопроса после заполнения:</p>'+
+        '<ol class="q">'+
+          '<li>Какие задачи <b>уже подешевели</b> — даже если я делаю их руками?</li>'+
+          '<li>Какие держу при себе <b>ради ощущения занятости</b>, а не результата?</li>'+
+          '<li>Каких задач 🔴 почти нет — <b>их нет в роли или я их избегаю?</b></li>'+
+        '</ol>'+
+        '<p style="margin:1.2rem 0 .2rem">Цель на полгода — не «ускоряться в 🟢», а перенести вес:'+
+        ' <b>+2–3 задачи 🔴 в неделю</b>, туда, где цена растёт.</p>'+
+        '<button class="btn" id="copy">Копировать итог</button> '+
+        '<button class="btn" id="saveProfile">💾 В мой профиль</button>'+
+        '<p class="profile-note">Хранится только в этом браузере, никуда не отправляется. <a href="../my-profile/tool.html">Мой профиль →</a></p>'+
+        '<pre id="sum">'+esc(summary)+'</pre>'+
+      '</div>';
+    document.getElementById('copy').onclick = function(){
+      navigator.clipboard && navigator.clipboard.writeText(summary);
+      this.textContent='Скопировано ✓';
+    };
+    document.getElementById('saveProfile').onclick = function(){
+      var score = pctGY+'% в 🟢+🟡';
+      var summaryLine = 'Экспозиция (🟢+🟡): '+pctGY+'% времени · из них 🟢: '+pctG+'%';
+      var ok = saveToProfile('week-inventory','Инвентаризация недели',score,summaryLine);
+      this.textContent = ok ? '✓ Сохранено' : 'Не удалось (приватный режим?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

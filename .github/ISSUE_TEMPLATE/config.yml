@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Практикум на сайте
+    url: https://cheap-intelligence.vercel.app/
+    about: Живая версия всех материалов — всегда свежее, чем этот репозиторий
+  - name: Telegram-канал «AI Meets Reality»
+    url: https://t.me/aimeetsreality
+    about: Разборы происходящего от автора

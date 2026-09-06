@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Profile - When Intelligence Became Cheap Practicum</title>
+<!--
+  Local-first Practicum profile. This single file has no dependencies or network calls. It reads
+  results saved by the tools in this browser's localStorage and sends nothing anywhere.
+  Code license: MIT. Storage contract: key "praktikum.profile.v1".
+-->
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  h2{font-family:var(--display);font-size:1.05rem;margin:1.8rem 0 .6rem}
+  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;font-size:.9rem}
+  th,td{padding:.5rem .55rem;border-top:1px solid var(--border);text-align:left;vertical-align:middle}
+  thead th{background:var(--muted-bg);border-top:none;font-size:.78rem;color:var(--muted);font-weight:600}
+  a{color:var(--primary)}
+  .done{color:var(--green);font-weight:600}
+  .todo{color:var(--muted)}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;
+    transition:transform .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .btn--danger:hover{border-color:var(--red);color:var(--red)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.2rem 0}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result b.big{display:block;font-family:var(--display);font-size:clamp(1.3rem,3vw,1.8rem);
+    letter-spacing:-.02em;line-height:1.15;margin-bottom:.35rem}
+  textarea{width:100%;min-height:12rem;border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;
+    color:inherit;background:var(--bg)}
+  .hint{color:var(--muted);font-size:.82rem;margin:.2rem 0 1rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · my profile</p>
+  <h1>My adaptation profile</h1>
+  <p class="lede">See which Practicum tools you have completed, where you are on the
+    <a href="../../tracks/">maturity path</a>, and what to do next. Each tool has a
+    "💾 Save to My Profile" button that adds its result here.</p>
+  <p class="privacy"><b>Privacy:</b> everything stays <b>in this browser</b> in localStorage.
+    Nothing goes to the author or any third party. If you clear this site's data, the profile
+    disappears. The Reset button deletes it at once.</p>
+
+  <noscript><p>This profile needs JavaScript. The rest of the Practicum still works without it:
+    <a href="../../tracks/">maturity path</a> · <a href="../../tools/">tool catalog</a>.</p></noscript>
+
+  <div id="stage" class="result"></div>
+
+  <h2>Tools</h2>
+  <table>
+    <thead><tr><th>Tool</th><th>Stage</th><th>Status</th><th>Result</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="hint">Stages 0 and 4 do not have browser tools. Stage 0 covers the
+    <a href="../../start/">start</a> and the <a href="../../method/">method map</a>. Stage 4 uses
+    <a href="../../playbooks/change-gates/">change gates</a> and
+    <a href="../../playbooks/eval-set-builder/">evaluation sets</a>.</p>
+
+  <section id="trustLayer" hidden>
+    <h2>Trust layer</h2>
+    <div class="result" id="trustResult"></div>
+    <p class="hint">This is not a maturity stage. The Trust Compass helps you choose a second
+      channel, independent evidence, and a review date before a high-cost decision.</p>
+  </section>
+
+  <div class="row-actions">
+    <button class="btn btn--primary" id="export">Export as Markdown</button>
+    <button class="btn" id="copy" hidden>Copy</button>
+    <button class="btn btn--danger" id="reset">Reset profile</button>
+  </div>
+  <textarea id="md" hidden readonly></textarea>
+  <p class="hint" id="exporthint" hidden>Copy this into your notes, or give it to your AI
+    assistant with the prompt from "My one-page result" in the
+    <a href="../../playbooks/tom1-workbook/">Volume 1 workbook</a>.</p>
+
+  <footer>Part of the When Intelligence Became Cheap Practicum · your data stays in this browser · MIT ·
+    <a href="../../tracks/">maturity path</a> · <a href="./">about this tool</a> ·
+    Version: 2026-08-11</footer>
+</div>
+<script>
+(function(){
+  "use strict";
+  var KEY="praktikum.profile.v1";
+  var TOOLS=[
+    {slug:"value-levers-filter",   title:"Three value levers filter", stage:1},
+    {slug:"week-inventory",        title:"Week inventory",            stage:1},
+    {slug:"usefulness-level-check",title:"My usefulness level",       stage:1},
+    {slug:"five-deficits-audit",   title:"Five deficits audit",       stage:1},
+    {slug:"cognitive-debt-check",  title:"Cognitive debt tracker",    stage:1},
+    {slug:"personal-harness-builder",title:"Personal AI system builder",stage:2},
+    {slug:"weak-multiplier-canvas",title:"Weak multiplier canvas",   stage:2},
+    {slug:"ai-native-maturity-check",title:"Process maturity check", stage:3},
+    {slug:"visible-to-agent",      title:"Can an agent see me",       stage:3}
+  ];
+  var STAGE_NAMES={1:"Stage 1 - break down your work",2:"Stage 2 - build your system and make the first move",
+    3:"Stage 3 - team and processes"};
+  function load(){
+    try{var raw=localStorage.getItem(KEY);var p=raw?JSON.parse(raw):null;
+      return (p&&p.tools)?p:{savedAt:"",tools:{}};}
+    catch(e){return {savedAt:"",tools:{}};}
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+  function render(){
+    var p=load(),rows="",doneByStage={1:0,2:0,3:0},totalByStage={1:0,2:0,3:0};
+    TOOLS.forEach(function(t){
+      totalByStage[t.stage]++;
+      var r=p.tools[t.slug];
+      if(r)doneByStage[t.stage]++;
+      rows+="<tr><td><a href=\"../"+t.slug+"/tool.html\">"+esc(t.title)+"</a></td>"+
+        "<td>"+t.stage+"</td>"+
+        (r?"<td class=\"done\">✓ "+esc(r.date||"")+"</td><td>"+esc(r.score||"")+
+           (r.summary?" - "+esc(r.summary):"")+"</td>"
+          :"<td class=\"todo\">not completed</td><td class=\"todo\">-</td>")+"</tr>";
+    });
+    document.getElementById("rows").innerHTML=rows;
+    var cur=1;
+    if(doneByStage[1]>=totalByStage[1])cur=2;
+    if(cur===2&&doneByStage[2]>=totalByStage[2])cur=3;
+    if(cur===3&&doneByStage[3]>=totalByStage[3])cur=4;
+    var savedCount=TOOLS.filter(function(t){return !!p.tools[t.slug];}).length,html="";
+    if(savedCount===0){
+      html="<b class=\"big\">Your profile is empty</b>"+
+        "Complete any tool and choose \"💾 Save to My Profile.\" If you are unsure where to start, the "+
+        "<a href=\"../../tracks/\">maturity path</a> will point you to the right stage. Most people start with a "+
+        "<a href=\"../week-inventory/tool.html\">week inventory</a>.";
+    }else if(cur===4){
+      html="<b class=\"big\">You have completed the tool stages ("+savedCount+" of "+TOOLS.length+")</b>"+
+        "Next comes Stage 4: manage changes with gates. Build an "+
+        "<a href=\"../../playbooks/eval-set-builder/\">evaluation set</a> and use the "+
+        "<a href=\"../../playbooks/change-gates/\">change gate checklist</a>. Run these tools again "+
+        "every six months because your tasks will change.";
+    }else{
+      var next=null;
+      for(var i=0;i<TOOLS.length;i++){
+        if(TOOLS[i].stage===cur&&!p.tools[TOOLS[i].slug]){next=TOOLS[i];break;}
+      }
+      html="<b class=\"big\">"+esc(STAGE_NAMES[cur])+"</b>"+
+        "Tools completed: "+savedCount+" of "+TOOLS.length+
+        " (at this stage: "+doneByStage[cur]+" of "+totalByStage[cur]+").";
+      if(next){html+=" <br>Your next move: <a href=\"../"+next.slug+"/tool.html\">"+
+        esc(next.title)+" →</a>";}
+      html+="<br><span style=\"color:var(--muted);font-size:.85rem\">For what each stage means and when to move on, see the "+
+        "<a href=\"../../tracks/\">maturity path</a>.</span>";
+    }
+    document.getElementById("stage").innerHTML=html;
+
+    var trust=p.tools["trust-compass"];
+    var trustLayer=document.getElementById("trustLayer");
+    if(trust){
+      trustLayer.hidden=false;
+      document.getElementById("trustResult").innerHTML=
+        "<b class=\"big\">Your Trust Compass is ready</b>"+
+        "<p>"+esc(trust.summary||"Check that your second channel and independent evidence still work.")+"</p>"+
+        "<p><a href=\"../trust-compass/tool.html\">Open and review your Trust Compass →</a></p>";
+    }else{trustLayer.hidden=true;}
+  }
+  document.getElementById("export").addEventListener("click",function(){
+    var p=load(),d=new Date().toISOString().slice(0,10);
+    var md="# My When Intelligence Became Cheap Practicum profile\n\nExport date: "+d+
+      "\n\n| Tool | Stage | Completed | Result |\n|---|---|---|---|\n";
+    TOOLS.forEach(function(t){
+      var r=p.tools[t.slug];
+      md+="| "+t.title+" | "+t.stage+" | "+(r?(r.date||"yes"):"no")+" | "+
+        (r?String(r.score||"")+(r.summary?" - "+String(r.summary):""):"-")+" |\n";
+    });
+    var trust=p.tools["trust-compass"];
+    md+="\n## Trust layer\n\n"+(trust
+      ? "- Trust Compass: "+(trust.date||"yes")+" · "+(trust.summary||"no short result saved")+"\n"
+      : "- Trust Compass: not completed\n");
+    md+="\nThis profile is stored locally in the reader's browser. The reader exported it manually.\n";
+    var ta=document.getElementById("md");
+    ta.value=md;ta.hidden=false;
+    document.getElementById("copy").hidden=false;
+    document.getElementById("exporthint").hidden=false;
+    ta.focus();ta.select();
+  });
+  document.getElementById("copy").addEventListener("click",function(){
+    var ta=document.getElementById("md");ta.focus();ta.select();
+    try{navigator.clipboard.writeText(ta.value);this.textContent="✓ Copied";}
+    catch(e){document.execCommand("copy");this.textContent="✓ Copied";}
+  });
+  document.getElementById("reset").addEventListener("click",function(){
+    if(confirm("Delete this profile from the browser? You cannot undo this action.")){
+      try{localStorage.removeItem(KEY);}catch(e){}
+      document.getElementById("md").hidden=true;
+      document.getElementById("copy").hidden=true;
+      document.getElementById("exporthint").hidden=true;
+      render();
+    }
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мой уровень полезности — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Зеро-инстал инструмент к главе 5 («Пять уровней новой полезности»). Один файл, без сети.
+  Логика — companion/docs/playbooks/usefulness-levels-self-check.md. Код: MIT.
+-->
+<style>
+  :root{
+    --bg:#fff;--fg:#0a0a0a;--muted:#71717a;--muted-bg:#f4f4f5;--border:#e4e4e7;
+    --primary:#4f46e5;--primary-d:#4338ca;--accent:#f59e0b;--red:#ef4444;--radius:.75rem;--radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  h2{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:1.1rem;margin:2rem 0 .6rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.4rem}.privacy b{color:#10b981}
+  label.task{display:block;font-size:.85rem;color:var(--muted);margin:.2rem 0 .3rem}
+  input[type=text]{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.55rem .6rem;font:inherit;color:inherit;background:var(--bg)}
+  .lvl{display:block;border:1px solid var(--border);border-radius:var(--radius);padding:.7rem .85rem;margin:.45rem 0;cursor:pointer;transition:border-color .12s,background .12s}
+  .lvl:hover{border-color:var(--muted)}
+  .lvl input{margin-right:.5rem}
+  .lvl.sel{border-color:var(--primary);background:rgba(79,70,229,.05)}
+  .lvl b{font-family:var(--display)}
+  .lvl span{display:block;color:var(--muted);font-size:.85rem;margin-left:1.35rem}
+  .checks{margin:.4rem 0 0}
+  .checks label{display:block;font-size:.88rem;margin:.35rem 0;cursor:pointer}
+  .checks input{margin-right:.5rem}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff;margin-top:1.4rem}
+  .btn--primary:hover{background:var(--primary-d)}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1.2rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result .big{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3.2vw,2rem);letter-spacing:-.02em;margin:0 0 .3rem}
+  .warn{border-left:3px solid var(--accent);background:rgba(245,158,11,.08);padding:.6rem .8rem;border-radius:.5rem;margin:.7rem 0;font-size:.88rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · глава 5</p>
+  <h1>Мой уровень полезности</h1>
+  <p class="lede">Не «какой я человек», а за что вам платят в связке «работа + ИИ + результат».
+  Возьмите одну конкретную задачу последней недели.</p>
+  <p class="privacy"><b>Данные остаются у вас:</b> всё считается в браузере.</p>
+
+  <h2>1. Задача</h2>
+  <label class="task">Один результат, который вы делали с ИИ за неделю (конкретно: «разобрал договор», не «работал над проектом»).</label>
+  <input type="text" id="task" placeholder="напр. подготовил решение для руководителя">
+
+  <h2>2. Где стоит эта задача</h2>
+  <div id="levels"></div>
+
+  <h2>3. Проверка против самообмана</h2>
+  <p class="lede" style="font-size:.88rem">Отметьте только то, что <b>реально</b> так. Невыполненные условия опустят уровень.</p>
+  <div class="checks" id="checks"></div>
+
+  <button class="btn btn--primary" id="calc">Показать уровень и ход на +1</button>
+  <div id="out"></div>
+
+  <footer>
+    Инструмент к рабочему листу «Мой уровень полезности» (глава 5). Уровень — про задачу, не про
+    личность; в разных задачах он разный. <b>Не верьте — проверьте.</b> Код — MIT, данные не покидают
+    браузер. Версия 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var LV = [
+    {n:0,t:'Исполнитель инструкции',s:'получил постановку, сдал результат'},
+    {n:1,t:'Пользователь ИИ',s:'сделал быстрее с моделью'},
+    {n:2,t:'Валидатор',s:'проверил критерии, качество и риск'},
+    {n:3,t:'Оркестратор',s:'собрал процесс из людей, агента, данных и инструментов'},
+    {n:4,t:'Владелец результата',s:'отвечал за метрику, клиента, деньги или риск'},
+    {n:5,t:'Создатель системы',s:'упаковал решение так, что оно работает без вас'}
+  ];
+  var box = document.getElementById('levels');
+  LV.forEach(function(l){
+    var lab=document.createElement('label'); lab.className='lvl';
+    lab.innerHTML='<b><input type="radio" name="lvl" value="'+l.n+'">'+l.n+'. '+l.t+'</b><span>'+l.s+'</span>';
+    lab.querySelector('input').onchange=function(){
+      [].forEach.call(box.children,function(c){c.classList.remove('sel');});
+      lab.classList.add('sel');
+    };
+    box.appendChild(lab);
+  });
+
+  // Условия-«ступени»: отметка подтверждает, что уровень N реально достигнут.
+  var CH = [
+    {k:'check', lvl:2, t:'У меня есть критерии «правильно» — я проверяю качество и риск, а не пересылаю ответ.'},
+    {k:'orch',  lvl:3, t:'Я собрал процесс: люди, агент, данные, инструменты — а не сделал в одном чате.'},
+    {k:'own',   lvl:4, t:'Я отвечал за outcome: метрику, клиента, деньги или риск.'},
+    {k:'sys',   lvl:5, t:'Решение воспроизводится без меня (другой человек повторит по моей упаковке).'}
+  ];
+  var cbox=document.getElementById('checks');
+  CH.forEach(function(c){
+    var lab=document.createElement('label');
+    lab.innerHTML='<input type="checkbox" data-lvl="'+c.lvl+'">'+c.t;
+    cbox.appendChild(lab);
+  });
+
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  document.getElementById('calc').onclick=function(){
+    var sel=document.querySelector('input[name=lvl]:checked');
+    var out=document.getElementById('out');
+    if(!sel){ out.innerHTML='<p class="warn">Выберите, где стоит задача (пункт 2).</p>'; return; }
+    var claimed=+sel.value;
+    var ok={}; [].forEach.call(cbox.querySelectorAll('input'),function(i){ if(i.checked) ok[+i.getAttribute('data-lvl')]=true; });
+    // Реальный уровень = заявленный, но не выше первой неподтверждённой ступени (2→3→4→5).
+    var real=claimed, capped=false, missing=null;
+    for(var n=2;n<=claimed;n++){ if(!ok[n]){ real=n-1; capped=true; missing=n; break; } }
+    var L=LV[real];
+    var next=real<5?LV[real+1]:null;
+    var task=(document.getElementById('task').value||'').trim();
+    var html='<div class="result">'+
+      '<p class="big">Уровень '+real+'. '+L.t+'</p>'+
+      (task?'<p style="margin:.1rem 0 .6rem;color:var(--muted)">Задача: '+task.replace(/[<>&]/g,'')+'</p>':'');
+    if(capped){
+      var why={2:'нет критериев «правильно» — это ещё не валидатор',3:'процесс не собран — это ещё не оркестратор',4:'нет ответственности за outcome — это ещё не владелец результата',5:'решение не воспроизводится без вас — это ещё не система'}[missing];
+      html+='<div class="warn">Вы отметили уровень '+claimed+', но '+why+'. Поэтому по факту — уровень '+real+'. Это не придирка: рынок платит за подтверждённую ступень, а не за заявленную.</div>';
+    }
+    var nextMoveText;
+    if(next){
+      nextMoveText=nextMove(real);
+      html+='<p style="margin:.8rem 0 .2rem"><b>Ход на +1 → уровень '+next.n+'. '+next.t+':</b></p>'+
+        '<p style="margin:.1rem 0">'+nextMoveText+'</p>'+
+        '<p style="margin:.9rem 0 0;font-size:.88rem;color:var(--muted)">Дальше — план «Один ход на +1 уровень» в рабочих листах Практикума.</p>';
+    } else {
+      nextMoveText='Высшая отметка. Дальше полезнее не «расти в уровне», а тиражировать систему на новые задачи и людей.';
+      html+='<p style="margin:.8rem 0 0">'+nextMoveText+'</p>';
+    }
+    html+='<button class="btn" id="saveProfile" style="margin-top:1rem">💾 В мой профиль</button>'+
+      '<p class="profile-note">Хранится только в этом браузере, никуда не отправляется. <a href="../my-profile/tool.html">Мой профиль →</a></p>';
+    html+='</div>';
+    out.innerHTML=html;
+    document.getElementById('saveProfile').onclick=function(){
+      var score='Уровень '+real+'. '+L.t;
+      var ok=saveToProfile('usefulness-level-check','Мой уровень полезности',score,nextMoveText);
+      this.textContent = ok ? '✓ Сохранено' : 'Не удалось (приватный режим?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  function nextMove(cur){
+    return [
+      'Перестаньте пересылать ответ модели как есть: один раз сделайте быстрее и сверьте с фактами.',
+      'Выпишите критерии «правильно» для этой задачи и проверяйте по ним — станьте валидатором своей работы.',
+      'Соберите вокруг задачи процесс: какой шаг отдать агенту, какие данные подключить, кто проверяет.',
+      'Возьмите ответственность за outcome: договоритесь, за какую метрику/клиента/риск отвечаете вы.',
+      'Упакуйте решение так, чтобы его повторил другой человек без вас: шаблон, чек-лист, навык.'
+    ][cur];
+  }
+})();
+</script>
+</body>
+</html>

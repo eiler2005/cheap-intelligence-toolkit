@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тест зрелости процесса — Практикум «Когда интеллект стал дешёвым»</title>
+<!--
+  Зеро-инстал инструмент к главе 1 Тома 2 книги «Когда интеллект стал дешёвым». Один файл, без сети:
+  всё считается в браузере, данные никуда не уходят. Лицензия кода: MIT.
+  Логика — рабочий лист companion/docs/playbooks/ai-native-maturity-check.md (6 признаков + уровень 0–5).
+-->
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  .field{margin:0 0 1.1rem}
+  .field>label{display:block;font-weight:600;font-size:.92rem;margin:0 0 .35rem}
+  input[type=text],select{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.5rem .6rem;
+    font:inherit;color:inherit;background:var(--bg)}
+  select{max-width:30rem}
+  .box{border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin:0 0 1.1rem}
+  .box h2{font-family:var(--display);font-size:1.02rem;margin:0 0 .5rem;letter-spacing:-.01em}
+  label.chk{display:flex;gap:.6rem;align-items:flex-start;padding:.35rem 0;cursor:pointer}
+  label.chk input{margin-top:.25rem;width:1.05rem;height:1.05rem;accent-color:var(--primary);flex:none}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:.4rem 0 1.8rem}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .stat{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 1rem}
+  .stat>div{min-width:8rem}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;line-height:1.05;letter-spacing:-.02em}
+  .stat span{display:block;color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  .q{margin:1rem 0 0;padding-left:1.1rem}
+  .q li{margin:.3rem 0}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .hint{color:var(--muted);font-size:.82rem;margin:.2rem 0 1rem}
+  .report{margin-top:1.3rem;padding-top:1.1rem;border-top:1px dashed var(--border)}
+  .report h2{font-family:var(--display);font-size:1.05rem;margin:0 0 .5rem;letter-spacing:-.01em}
+  .report-meta{color:var(--muted);font-size:.85rem;margin:0 0 .8rem}
+  .report-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0 .4rem}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+  @media print{
+    body *{visibility:hidden}
+    #out,#out *{visibility:visible}
+    #out{position:absolute;left:0;top:0;width:100%;padding:0}
+    #out .btn,#out pre,#out .profile-note{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Практикум · Том 2 · глава 1</p>
+  <h1>Тест зрелости процесса</h1>
+  <p class="lede">Возьмите <b>один</b> процесс, а не компанию целиком. Отметьте, что уже правда —
+  и увидите, где у вас косметика, а где начинается реконструкция.</p>
+  <p class="privacy"><b>Данные остаются у вас:</b> расчёт идёт в браузере, ничего никуда не отправляется.</p>
+
+  <div class="field">
+    <label for="proc">Процесс (один)</label>
+    <input type="text" id="proc" placeholder="напр. разбор входящего договора">
+  </div>
+
+  <div class="box">
+    <h2>Шесть признаков реконструкции</h2>
+    <label class="chk"><input type="checkbox"> Карта работы изменилась — шаги стали другими, а не «то же, но быстрее».</label>
+    <label class="chk"><input type="checkbox"> Роли изменились — люди делают больше постановки и проверки.</label>
+    <label class="chk"><input type="checkbox"> Метрики изменились — смотрим на результат/цикл, а не на объём.</label>
+    <label class="chk"><input type="checkbox"> Проверка качества встроена в поток (не «когда есть время»).</label>
+    <label class="chk"><input type="checkbox"> Человек остался в критической точке (где цена ошибки высокая).</label>
+    <label class="chk"><input type="checkbox"> Есть измеримый результат для клиента или для денег.</label>
+  </div>
+
+  <div class="field">
+    <label for="lvl">Уровень процесса сейчас (0–5)</label>
+    <select id="lvl">
+      <option value="">— выберите —</option>
+      <option value="0">0 — ИИ не используется</option>
+      <option value="1">1 — хаос: пробуем без системы</option>
+      <option value="2">2 — личная продуктивность: процесс прежний</option>
+      <option value="3">3 — командный процесс: есть проверка</option>
+      <option value="4">4 — операционная модель: пересобран вокруг ИИ</option>
+      <option value="5">5 — AI-native: процесс другой, результат измерим</option>
+    </select>
+  </div>
+
+  <div class="row-actions">
+    <button class="btn btn--primary" id="calc">Поставить диагноз</button>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Инструмент к рабочему листу «Тест зрелости процесса» книги «Когда интеллект стал дешёвым» (Том 2, гл. 1).
+    <b>Это зеркало, не аудит:</b> диагностируем один процесс, балл — повод подумать. Отчёт можно
+    скопировать или распечатать и показать команде. Код — MIT, данные не покидают браузер. Версия 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  // По одному конкретному ходу на каждый из шести признаков (B), сформулировано по логике
+  // раздела E рабочего листа playbooks/ai-native-maturity-check.md. Используется, только если
+  // признак ещё не отмечен — показываем «где резать», а не общий список вопросов.
+  var ACTIONS = [
+    'Определите, что меняем в карте работы: какие шаги должны стать другими, а не просто быстрее.',
+    'Назначьте роль-владельца результата — кто теперь отвечает за постановку и проверку.',
+    'Замените метрику объёма на метрику outcome, которую видно в отчётности.',
+    'Встройте проверку качества в поток и определите, кто проверяет — не ИИ проверяет ИИ.',
+    'Определите точку, где цена ошибки высокая, и закрепите право остановить процесс за человеком.',
+    'Сформулируйте измеримый результат для клиента или для денег — конкретную цифру, не «мы внедрили ИИ».'
+  ];
+  // Если признаков-пробелов меньше трёх, добираем шаги отсюда (раздел «Дальше» рабочего листа).
+  var FALLBACK = [
+    'Закрепите изменения письменно: опишите новую карту работы и роли, чтобы не откатиться к косметике.',
+    'Проверьте ещё раз, где именно человек держит критическую точку — это первое, что теряется при масштабировании.',
+    'Если уровень процесса 2–3, следующий шаг — Human Review Matrix: что отдать ИИ, а что оставить человеку (глава 2 книги).'
+  ];
+
+  document.getElementById('calc').onclick = function(){
+    var proc = document.getElementById('proc').value.trim();
+    var checks = 0;
+    var answers = [];
+    var missingActions = [];
+    document.querySelectorAll('.box label.chk').forEach(function(label, i){
+      var input = label.querySelector('input[type=checkbox]');
+      var text = label.textContent.trim();
+      if(input.checked){ checks++; } else if(ACTIONS[i]){ missingActions.push(ACTIONS[i]); }
+      answers.push((input.checked?'✓ ':'— ')+text);
+    });
+    var lvlRaw = document.getElementById('lvl').value;
+    var lvl = lvlRaw==='' ? null : parseInt(lvlRaw,10);
+    var lvlSelect = document.getElementById('lvl');
+    var lvlText = lvlRaw==='' ? '' : lvlSelect.options[lvlSelect.selectedIndex].textContent;
+
+    var diag, note;
+    if(checks <= 2){ diag='Косметика'; note='ИИ «прикрутили»: делаете старое быстрее. Нормально как старт, но сдвига ценности пока нет.'; }
+    else if(checks >= 5){ diag='Системная реконструкция'; note='Процесс реально другой. Дальше — масштаб и удержание человека в критической точке.'; }
+    else { diag='Переходный процесс'; note='Начали менять роли и проверку — решается, доведёте до модели или откатитесь к ускорению.'; }
+    if(lvl!==null && lvl<=2 && diag!=='Косметика'){ diag='Косметика'; note='Признаки есть, но уровень процесса низкий (0–2): пока ускорение старого, не реконструкция.'; }
+    if(lvl!==null && lvl>=4 && checks>=4){ diag='Системная реконструкция'; note='Высокий уровень и большинство признаков — процесс пересобран вокруг ИИ.'; }
+
+    var steps = missingActions.concat(FALLBACK).slice(0,3);
+    var todayISO = new Date().toISOString().slice(0,10);
+
+    var summary =
+      'ТЕСТ ЗРЕЛОСТИ ПРОЦЕССА — Практикум «Когда интеллект стал дешёвым»\n'+
+      'Дата: '+todayISO+'\n'+
+      'Процесс: '+(proc||'(не указан)')+'\n\n'+
+      'Ответы (признаки реконструкции):\n'+answers.join('\n')+'\n\n'+
+      'Признаков реконструкции: '+checks+'/6'+(lvl!==null?(' · Уровень: '+lvlText):'')+'\n'+
+      'Диагноз: '+diag+'\n\n'+
+      'Интерпретация:\n'+note+'\n\n'+
+      'Три следующих шага:\n'+steps.map(function(s,i){ return (i+1)+'. '+s; }).join('\n')+'\n\n'+
+      '— Практикум «Когда интеллект стал дешёвым», инструмент «Тест зрелости процесса» (Том 2, глава 1)';
+
+    document.getElementById('out').innerHTML =
+      '<div class="result">'+
+        '<div class="stat">'+
+          '<div><b>'+esc(diag)+'</b><span>диагноз процесса</span></div>'+
+          '<div><b>'+checks+'/6</b><span>признаков'+(lvl!==null?(' · ур. '+lvl+'/5'):'')+'</span></div>'+
+        '</div>'+
+        '<p style="margin:.2rem 0 0">'+esc(note)+'</p>'+
+        '<div class="report">'+
+          '<h2>Отчёт</h2>'+
+          '<p class="report-meta"><b>Тест зрелости процесса</b> · Практикум «Когда интеллект стал дешёвым» · '+new Date().toLocaleDateString('ru-RU')+
+            (proc?(' · процесс: '+esc(proc)):'')+'</p>'+
+          '<p><b>Три следующих шага</b> — по самым слабым признакам:</p>'+
+          '<ol class="q">'+steps.map(function(s){ return '<li>'+esc(s)+'</li>'; }).join('')+'</ol>'+
+          '<div class="report-actions">'+
+            '<button class="btn" id="copy">📋 Скопировать отчёт</button>'+
+            '<button class="btn" id="printBtn">🖨 Печать</button>'+
+            '<button class="btn" id="saveProfile">💾 В мой профиль</button>'+
+          '</div>'+
+          '<p class="profile-note">Хранится только в этом браузере, никуда не отправляется. <a href="../my-profile/tool.html">Мой профиль →</a></p>'+
+          '<pre id="sum">'+esc(summary)+'</pre>'+
+        '</div>'+
+      '</div>';
+    document.getElementById('copy').onclick = function(){
+      navigator.clipboard && navigator.clipboard.writeText(summary);
+      this.textContent='Скопировано ✓';
+    };
+    document.getElementById('printBtn').onclick = function(){ window.print(); };
+    document.getElementById('saveProfile').onclick = function(){
+      var score = diag+' · '+checks+'/6';
+      var ok = saveToProfile('ai-native-maturity-check','Тест зрелости процесса',score,note);
+      this.textContent = ok ? '✓ Сохранено' : 'Не удалось (приватный режим?)';
+      if(ok) this.disabled = true;
+    };
+    document.getElementById('out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

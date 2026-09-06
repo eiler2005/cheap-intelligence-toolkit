@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Компас доверия — Практикум «Когда интеллект стал дешёвым»</title>
+<!-- Local-first. Данные остаются в браузере; ключ профиля: praktikum.profile.v1. MIT. -->
+<style>
+:root{--bg:#fff;--fg:#0a0a0a;--muted:#71717a;--soft:#f4f4f5;--border:#e4e4e7;--blue:#4f46e5;--orange:#f59e0b;--green:#059669;--r:12px}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 Inter,system-ui,sans-serif}.wrap{max-width:820px;margin:auto;padding:28px 18px 56px}h1,h2{font-family:"Space Grotesk",Inter,sans-serif;line-height:1.12}h1{font-size:clamp(30px,5vw,44px);margin:.15em 0}h2{margin:32px 0 10px;font-size:22px}.eyebrow{color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.lede,.hint{color:var(--muted)}.notice{border-left:3px solid var(--orange);background:#fff8eb;padding:12px 14px;border-radius:8px}.card{border:1px solid var(--border);border-radius:var(--r);padding:18px;margin:14px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:640px){.grid{grid-template-columns:1fr}}label{display:block;font-weight:650;margin:12px 0 5px}label span{font-weight:400;color:var(--muted)}input,textarea,select{width:100%;font:inherit;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--fg)}textarea{min-height:76px;resize:vertical}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}.btn{border:1px solid var(--border);background:var(--bg);color:var(--fg);border-radius:999px;padding:10px 16px;font:600 15px Inter,sans-serif;cursor:pointer}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.result{background:var(--soft);border-radius:var(--r);padding:18px;margin-top:20px}.result pre{white-space:pre-wrap;overflow-wrap:anywhere;background:white;border:1px solid var(--border);padding:14px;border-radius:8px;font:13px/1.5 ui-monospace,monospace}footer{border-top:1px solid var(--border);margin-top:40px;padding-top:18px;color:var(--muted);font-size:13px}@media print{.actions,.notice,footer{display:none}.wrap{max-width:none;padding:0}.card{break-inside:avoid}.result{background:none;border:1px solid #000}}
+</style>
+</head>
+<body><main class="wrap">
+<p class="eyebrow">Практикум · Том 3 · local-first</p>
+<h1>Компас доверия</h1>
+<p class="lede">Не определяет, настоящий ли голос или файл. Он помогает заранее решить, что вы
+проверяете, где нужен второй канал и кто отвечает за решение.</p>
+<p class="notice"><b>Приватность:</b> записи остаются в этом браузере. Их можно экспортировать в Markdown или удалить через данные сайта.</p>
+<form id="form">
+<section class="card"><h2>1. Дом</h2><div class="grid">
+<div><label for="homeScenario">Дорогая ситуация <span>что может пойти не так?</span></label><textarea id="homeScenario" required></textarea></div>
+<div><label for="homeCost">Цена ошибки</label><select id="homeCost"><option>Высокая: деньги, здоровье, доступ</option><option>Средняя: важная договорённость</option><option>Низкая и обратимая</option></select></div>
+<div><label for="homeChannel">Второй канал</label><textarea id="homeChannel" required></textarea></div>
+<div><label for="homeEvidence">Независимая опора или человек</label><textarea id="homeEvidence" required></textarea></div>
+</div><label for="homeShow">Что я предъявляю близким, когда проверяют меня</label><textarea id="homeShow"></textarea></section>
+<section class="card"><h2>2. Работа и дело</h2><div class="grid">
+<div><label for="workScenario">Дорогое распоряжение или риск</label><textarea id="workScenario" required></textarea></div>
+<div><label for="workCost">Цена ошибки</label><select id="workCost"><option>Высокая: деньги, доступ, репутация</option><option>Средняя: важное обязательство</option><option>Низкая и обратимая</option></select></div>
+<div><label for="workChannel">Второй канал</label><textarea id="workChannel" required></textarea></div>
+<div><label for="workEvidence">Независимая опора или доказательство</label><textarea id="workEvidence" required></textarea></div>
+</div><label for="workShow">Что я предъявляю клиенту или команде</label><textarea id="workShow"></textarea></section>
+<section class="card"><h2>3. Ответственность и следующий ход</h2><div class="grid">
+<div><label for="owner">Человек-владелец решения</label><textarea id="owner" required></textarea></div>
+<div><label for="repair">Если ошиблись вы: что сказать, показать и изменить</label><textarea id="repair" required></textarea></div>
+<div><label for="move">Один ход на 30 дней</label><textarea id="move" required></textarea></div>
+<div><label for="review">Дата повторной проверки</label><input id="review" type="date" required></div>
+</div></section>
+<div class="actions"><button class="btn primary" type="submit">Собрать протокол</button><button class="btn" type="button" id="copy" hidden>Копировать Markdown</button><button class="btn" type="button" id="save" hidden>Сохранить в профиль</button><button class="btn" type="button" id="print" hidden>Печать</button></div>
+</form><section id="out" class="result" hidden><h2>Ваш протокол</h2><p class="hint">Проверьте: второй канал не должен контролироваться тем, чью просьбу вы проверяете.</p><pre id="markdown"></pre></section>
+<footer>Часть Практикума «Когда интеллект стал дешёвым» · код MIT · данные не покидают браузер · версия 2026-08-11.</footer>
+</main><script>
+(function(){"use strict";var ids=["homeScenario","homeCost","homeChannel","homeEvidence","homeShow","workScenario","workCost","workChannel","workEvidence","workShow","owner","repair","move","review"],current="";function v(id){return document.getElementById(id).value.trim()}function protocol(){return "# Мой протокол доверия\n\nДата: "+new Date().toISOString().slice(0,10)+"\n\n## Дом\n\n- Дорогая ситуация: "+v("homeScenario")+"\n- Цена ошибки: "+v("homeCost")+"\n- Второй канал: "+v("homeChannel")+"\n- Независимая опора: "+v("homeEvidence")+"\n- Что предъявляю я: "+(v("homeShow")||"не записано")+"\n\n## Работа и дело\n\n- Дорогая ситуация: "+v("workScenario")+"\n- Цена ошибки: "+v("workCost")+"\n- Второй канал: "+v("workChannel")+"\n- Независимая опора: "+v("workEvidence")+"\n- Что предъявляю я: "+(v("workShow")||"не записано")+"\n\n## Ответственность\n\n- Человек-владелец: "+v("owner")+"\n- Если ошиблись мы: "+v("repair")+"\n- Один ход на 30 дней: "+v("move")+"\n- Повторная проверка: "+v("review")+"\n\nПротокол хранится локально в браузере; экспорт сделан вручную."}function show(){current=protocol();document.getElementById("markdown").textContent=current;document.getElementById("out").hidden=false;["copy","save","print"].forEach(function(id){document.getElementById(id).hidden=false})}document.getElementById("form").addEventListener("submit",function(e){e.preventDefault();show();document.getElementById("out").scrollIntoView({behavior:"smooth",block:"start"})});document.getElementById("copy").onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(current);this.textContent="Скопировано ✓"};document.getElementById("print").onclick=function(){window.print()};document.getElementById("save").onclick=function(){try{var raw=localStorage.getItem("praktikum.profile.v1"),p=raw?JSON.parse(raw):{savedAt:"",tools:{}};if(!p.tools)p.tools={};p.tools["trust-compass"]={title:"Компас доверия",date:new Date().toISOString().slice(0,10),score:"Протокол собран",summary:"Повторная проверка: "+v("review")};p.savedAt=new Date().toISOString();localStorage.setItem("praktikum.profile.v1",JSON.stringify(p));this.textContent="Сохранено ✓";this.disabled=true}catch(e){this.textContent="Не удалось сохранить"}}})();
+</script></body></html>

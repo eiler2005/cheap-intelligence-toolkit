@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can an agent find me - Practicum "When Intelligence Became Cheap"</title>
+
+<style>
+  :root{
+    --bg:#fff; --fg:#0a0a0a; --muted:#71717a; --muted-bg:#f4f4f5; --border:#e4e4e7;
+    --primary:#4f46e5; --primary-d:#4338ca; --accent:#f59e0b;
+    --green:#10b981; --amber:#f59e0b; --red:#ef4444; --radius:.75rem; --radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;
+    font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.6rem}
+  .privacy b{color:var(--green)}
+  .lever{border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin:0 0 1rem}
+  .lever h2{font-family:var(--display);font-size:1.05rem;margin:0 0 .2rem;letter-spacing:-.01em}
+  .lever p.sub{color:var(--muted);font-size:.85rem;margin:0 0 .7rem}
+  label.chk{display:flex;gap:.6rem;align-items:flex-start;padding:.35rem 0;cursor:pointer}
+  label.chk input{margin-top:.25rem;width:1.05rem;height:1.05rem;accent-color:var(--primary);flex:none}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;
+    transition:transform .12s ease,background .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn--primary:hover{background:var(--primary-d)}
+  .row-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:.4rem 0 1.8rem}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),
+      radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .stat{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 1rem}
+  .stat>div{min-width:8rem}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;
+    line-height:1;letter-spacing:-.02em}
+  .stat span{display:block;color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  .bar{height:.55rem;border-radius:999px;background:var(--border);overflow:hidden;margin:.2rem 0 .9rem;max-width:32rem}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--amber),var(--green))}
+  .weak{color:var(--red);font-weight:600}
+  pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;margin:.6rem 0 0}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .hint{color:var(--muted);font-size:.82rem;margin:.2rem 0 1rem}
+  .q{margin:.4rem 0 0;padding-left:1.1rem}
+  .q li{margin:.3rem 0}
+  .report{margin-top:1.3rem;padding-top:1.1rem;border-top:1px dashed var(--border)}
+  .report h2{font-family:var(--display);font-size:1.05rem;margin:0 0 .5rem;letter-spacing:-.01em}
+  .report-meta{color:var(--muted);font-size:.85rem;margin:0 0 .8rem}
+  .report-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0 .4rem}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+  @media print{
+    body *{visibility:hidden}
+    #out,#out *{visibility:visible}
+    #out{position:absolute;left:0;top:0;width:100%;padding:0}
+    #out .btn,#out pre,#out .profile-note{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · Volume 2 · chapter 6</p>
+  <h1>Can an agent find me?</h1>
+  <p class="lede">When an agent chooses and pays, it favors options it can <b>find</b>, <b>understand</b> quickly, and <b>buy</b> without a negotiation. Mark what you already have.</p>
+  <p class="privacy"><b>Your data stays with you:</b> the calculation runs in your browser, and nothing is sent anywhere.</p>
+
+  <div class="lever" data-key="find">
+    <h2>1. Findability</h2>
+    <p class="sub">Can the agent find you in the sources AI systems use?</p>
+    <label class="chk"><input type="checkbox"> AI answers mention me for the main searches my customers make.</label>
+    <label class="chk"><input type="checkbox"> I appear on sources AI systems may rely on, such as industry sites, directories, and review platforms.</label>
+    <label class="chk"><input type="checkbox"> My name, contact details, and address match across sources.</label>
+    <label class="chk"><input type="checkbox"> I have a machine-readable description with structure and facts instead of images alone.</label>
+  </div>
+
+  <div class="lever" data-key="eval">
+    <h2>2. Evaluability</h2>
+    <p class="sub">Can the agent understand your value with little text (token-to-value)?</p>
+    <label class="chk"><input type="checkbox"> One or two sentences explain what I do and who it helps.</label>
+    <label class="chk"><input type="checkbox"> Pricing and terms are visible without a negotiation.</label>
+    <label class="chk"><input type="checkbox"> I show specific examples, cases, or numbers instead of broad claims.</label>
+    <label class="chk"><input type="checkbox"> The description is concise and free of marketing filler.</label>
+  </div>
+
+  <div class="lever" data-key="exec">
+    <h2>3. Actionability</h2>
+    <p class="sub">Can the agent complete the purchase without a negotiation, and is ownership clear?</p>
+    <label class="chk"><input type="checkbox"> The next step is clear: how to buy, contact me, or place an order.</label>
+    <label class="chk"><input type="checkbox"> A buyer can complete the step without a required call or negotiation.</label>
+    <label class="chk"><input type="checkbox"> The agent can access the needed data through an API, structured listing, or clear contact route.</label>
+    <label class="chk"><input type="checkbox"> It is clear who owns the transaction, warranty, and refund.</label>
+  </div>
+
+  <div class="row-actions">
+    <button class="btn btn--primary" id="calc">Check visibility</button>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Companion tool for the "AI search visibility kit" worksheet in When Intelligence Became Cheap, Volume 2, chapter 6.
+    <b>Check the result:</b> this is a map, not a verdict. AI search results vary, and API results can differ from the user interface.
+    You can copy or print the report for your team. The code is MIT licensed. Your data never leaves the browser.
+    Version 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+  var META = {
+    find: {name:'Findability', move:'Publish two or three concrete facts, such as a number, case, or quote, in sources AI systems use for your field. Make sure your name and contact details match.'},
+    eval: {name:'Evaluability', move:'Rewrite the first screen as one clear sentence about who you help and how. Add the price and one example. Cut filler.'},
+    exec: {name:'Actionability', move:'Make the next step obvious and possible without a negotiation. State who owns the transaction.'}
+  };
+  var order = ['find','eval','exec'];
+  function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+
+  document.getElementById('calc').onclick = function(){
+    var scores = {};
+    var answers = {};
+    order.forEach(function(k){
+      var box = document.querySelector('.lever[data-key="'+k+'"]');
+      var labels = box.querySelectorAll('label.chk');
+      var done = 0; var list = [];
+      labels.forEach(function(label){
+        var input = label.querySelector('input[type=checkbox]');
+        var text = label.textContent.trim();
+        if(input.checked) done++;
+        list.push((input.checked?'✓ ':'- ')+text);
+      });
+      scores[k] = {done:done, total:labels.length};
+      answers[k] = list;
+    });
+    var weakest = order[0];
+    order.forEach(function(k){ if(scores[k].done < scores[weakest].done) weakest = k; });
+    var totalDone = scores.find.done + scores.eval.done + scores.exec.done;
+    var totalAll = scores.find.total + scores.eval.total + scores.exec.total;
+
+
+
+    var sortedByWeakness = order.slice().sort(function(a,b){ return scores[a].done - scores[b].done; });
+    var steps = sortedByWeakness.map(function(k){
+      if(scores[k].done === scores[k].total){
+        return META[k].name+' ('+scores[k].done+'/'+scores[k].total+'): this lever is covered. Keep the facts current because listings and prices change quickly.';
+      }
+      return META[k].name+' ('+scores[k].done+'/'+scores[k].total+'): '+META[k].move;
+    });
+
+    var weakestSub = document.querySelector('.lever[data-key="'+weakest+'"] p.sub').textContent.trim();
+    var interp = 'When an agent chooses and pays, it favors options the machine can find, understand quickly, and '+
+      'buy without a negotiation. Your weakest lever is "'+META[weakest].name+'" ('+scores[weakest].done+'/'+scores[weakest].total+'): '+
+      weakestSub+' Start with one move on this lever instead of trying to fix everything at once.';
+
+    var todayISO = new Date().toISOString().slice(0,10);
+    var summary =
+      'CAN AN AGENT FIND ME | When Intelligence Became Cheap Practicum\n'+
+      'Date: '+todayISO+'\n\n'+
+      'Answers by lever:\n'+
+      order.map(function(k){ return META[k].name+' ('+scores[k].done+'/'+scores[k].total+'):\n'+answers[k].join('\n'); }).join('\n\n')+'\n\n'+
+      'Total: '+totalDone+'/'+totalAll+'\n'+
+      'Weakest lever: '+META[weakest].name+'\n\n'+
+      'Interpretation:\n'+interp+'\n\n'+
+      'Three next steps:\n'+steps.map(function(s,i){ return (i+1)+'. '+s; }).join('\n')+'\n\n'+
+      'When Intelligence Became Cheap Practicum, Can an agent find me (Volume 2, chapter 6)';
+
+    var bars = order.map(function(k){
+      var pct = Math.round(scores[k].done/scores[k].total*100);
+      var w = (k===weakest) ? ' class="weak"' : '';
+      return '<p style="margin:.2rem 0 .1rem"><span'+w+'>'+META[k].name+'</span> - '+scores[k].done+'/'+scores[k].total+'</p>'+
+             '<div class="bar"><i style="width:'+pct+'%"></i></div>';
+    }).join('');
+
+    document.getElementById('out').innerHTML =
+      '<div class="result">'+
+        '<div class="stat">'+
+          '<div><b>'+totalDone+'/'+totalAll+'</b><span>conditions met</span></div>'+
+          '<div><b class="weak">'+META[weakest].name+'</b><span>weakest lever. Start here</span></div>'+
+        '</div>'+
+        bars+
+        '<div class="report">'+
+          '<h2>Report</h2>'+
+          '<p class="report-meta"><b>Can an agent find me</b> · Practicum "When Intelligence Became Cheap" · '+new Date().toLocaleDateString('en-US')+'</p>'+
+          '<p>'+esc(interp)+'</p>'+
+          '<p style="margin:1rem 0 .2rem"><b>Three next steps</b>, starting with the weakest lever:</p>'+
+          '<ol class="q">'+steps.map(function(s){ return '<li>'+esc(s)+'</li>'; }).join('')+'</ol>'+
+          '<div class="report-actions">'+
+            '<button class="btn" id="copy">📋 Copy report</button>'+
+            '<button class="btn" id="printBtn">🖨 Print</button>'+
+            '<button class="btn" id="saveProfile">💾 Save to My Profile</button>'+
+          '</div>'+
+          '<p class="profile-note">Saved only in this browser. Nothing is sent anywhere. <a href="../my-profile/tool.html">My Profile →</a></p>'+
+          '<pre id="sum">'+esc(summary)+'</pre>'+
+        '</div>'+
+      '</div>';
+    document.getElementById('copy').onclick = function(){
+      navigator.clipboard && navigator.clipboard.writeText(summary);
+      this.textContent='Copied ✓';
+    };
+    document.getElementById('printBtn').onclick = function(){ window.print(); };
+    document.getElementById('saveProfile').onclick = function(){
+      var score = totalDone+'/'+totalAll;
+      var summaryLine = 'Weakest lever: '+META[weakest].name;
+      var ok = saveToProfile('visible-to-agent','Can an agent find me',score,summaryLine);
+      this.textContent = ok ? '✓ Saved' : 'Could not save (private mode?)';
+      if(ok) this.disabled = true;
+    };
+    document.getElementById('out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+})();
+</script>
+</body>
+</html>

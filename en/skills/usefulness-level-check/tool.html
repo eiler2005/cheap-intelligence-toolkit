@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My usefulness level - Practicum "When Intelligence Became Cheap"</title>
+
+<style>
+  :root{
+    --bg:#fff;--fg:#0a0a0a;--muted:#71717a;--muted-bg:#f4f4f5;--border:#e4e4e7;
+    --primary:#4f46e5;--primary-d:#4338ca;--accent:#f59e0b;--red:#ef4444;--radius:.75rem;--radius-lg:1.25rem;
+    --display:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --text:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:1.6rem 1.1rem 4rem}
+  .eyebrow{font-family:var(--display);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin:0 0 .5rem}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.06;font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 .5rem}
+  h2{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:1.1rem;margin:2rem 0 .6rem}
+  .lede{color:var(--muted);max-width:46rem;margin:0 0 .4rem}
+  .privacy{font-size:.82rem;color:var(--muted);margin:.2rem 0 1.4rem}.privacy b{color:#10b981}
+  label.task{display:block;font-size:.85rem;color:var(--muted);margin:.2rem 0 .3rem}
+  input[type=text]{width:100%;border:1px solid var(--border);border-radius:.5rem;padding:.55rem .6rem;font:inherit;color:inherit;background:var(--bg)}
+  .lvl{display:block;border:1px solid var(--border);border-radius:var(--radius);padding:.7rem .85rem;margin:.45rem 0;cursor:pointer;transition:border-color .12s,background .12s}
+  .lvl:hover{border-color:var(--muted)}
+  .lvl input{margin-right:.5rem}
+  .lvl.sel{border-color:var(--primary);background:rgba(79,70,229,.05)}
+  .lvl b{font-family:var(--display)}
+  .lvl span{display:block;color:var(--muted);font-size:.85rem;margin-left:1.35rem}
+  .checks{margin:.4rem 0 0}
+  .checks label{display:block;font-size:.88rem;margin:.35rem 0;cursor:pointer}
+  .checks input{margin-right:.5rem}
+  .btn{font-family:var(--text);font-weight:600;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--fg);padding:.55rem 1.15rem;cursor:pointer;font-size:.9rem;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--primary{background:var(--primary);border-color:var(--primary);color:#fff;margin-top:1.4rem}
+  .btn--primary:hover{background:var(--primary-d)}
+  .result{border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem 1.4rem;margin-top:1.2rem;
+    background:radial-gradient(120% 140% at 0% 0%,rgba(245,158,11,.10),transparent 60%),radial-gradient(120% 150% at 100% 100%,rgba(79,70,229,.10),transparent 62%),var(--muted-bg)}
+  .result .big{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3.2vw,2rem);letter-spacing:-.02em;margin:0 0 .3rem}
+  .warn{border-left:3px solid var(--accent);background:rgba(245,158,11,.08);padding:.6rem .8rem;border-radius:.5rem;margin:.7rem 0;font-size:.88rem}
+  footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+  footer a{color:var(--primary)}
+  .profile-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0}
+  .profile-note a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Practicum · chapter 5</p>
+  <h1>My usefulness level</h1>
+  <p class="lede">This is not a judgment about you. It asks what people pay for in the mix of your work, AI, and the outcome. Choose one specific task from last week.</p>
+  <p class="privacy"><b>Your data stays with you:</b> everything runs in your browser.</p>
+
+  <h2>1. Task</h2>
+  <label class="task">Name one result you produced with AI last week. Be specific: "reviewed a contract," not "worked on a project."</label>
+  <input type="text" id="task" placeholder="for example, prepared a decision brief for my manager">
+
+  <h2>2. Where this task sits</h2>
+  <div id="levels"></div>
+
+  <h2>3. Check your claim</h2>
+  <p class="lede" style="font-size:.88rem">Check only what is <b>actually</b> true. Any unmet condition will lower the level.</p>
+  <div class="checks" id="checks"></div>
+
+  <button class="btn btn--primary" id="calc">Show my level and next move</button>
+  <div id="out"></div>
+
+  <footer>
+    Companion tool for the "My usefulness level" worksheet (chapter 5). The level describes a task, not your identity. You may be at different levels on different tasks. <b>Do not take the score on faith. Check it against real work.</b> The code is MIT licensed. Your data never leaves the browser. Version 2026-07-09.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var LV = [
+    {n:0,t:'Instruction follower',s:'received a brief and delivered the output'},
+    {n:1,t:'AI user',s:'completed the task faster with a model'},
+    {n:2,t:'Validator',s:'checked the criteria, quality, and risk'},
+    {n:3,t:'Orchestrator',s:'built a process from people, an agent, data, and tools'},
+    {n:4,t:'Outcome owner',s:'owned a metric, customer outcome, money, or risk'},
+    {n:5,t:'System builder',s:'packaged the solution so it works without you'}
+  ];
+  var box = document.getElementById('levels');
+  LV.forEach(function(l){
+    var lab=document.createElement('label'); lab.className='lvl';
+    lab.innerHTML='<b><input type="radio" name="lvl" value="'+l.n+'">'+l.n+'. '+l.t+'</b><span>'+l.s+'</span>';
+    lab.querySelector('input').onchange=function(){
+      [].forEach.call(box.children,function(c){c.classList.remove('sel');});
+      lab.classList.add('sel');
+    };
+    box.appendChild(lab);
+  });
+
+
+  var CH = [
+    {k:'check', lvl:2, t:'I have clear success criteria. I check quality and risk instead of forwarding the answer.'},
+    {k:'orch',  lvl:3, t:'I built a process with people, an agent, data, and tools instead of doing everything in one chat.'},
+    {k:'own',   lvl:4, t:'I owned the outcome: a metric, customer result, money, or risk.'},
+    {k:'sys',   lvl:5, t:'The solution can run without me. Another person can repeat it from my instructions.'}
+  ];
+  var cbox=document.getElementById('checks');
+  CH.forEach(function(c){
+    var lab=document.createElement('label');
+    lab.innerHTML='<input type="checkbox" data-lvl="'+c.lvl+'">'+c.t;
+    cbox.appendChild(lab);
+  });
+
+  function saveToProfile(slug, title, score, summary){
+    try{
+      var raw = localStorage.getItem('praktikum.profile.v1');
+      var p = raw ? JSON.parse(raw) : { savedAt:'', tools:{} };
+      if(!p.tools) p.tools = {};
+      p.tools[slug] = { title:title, date:new Date().toISOString().slice(0,10), score:String(score), summary:String(summary) };
+      p.savedAt = new Date().toISOString();
+      localStorage.setItem('praktikum.profile.v1', JSON.stringify(p));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  document.getElementById('calc').onclick=function(){
+    var sel=document.querySelector('input[name=lvl]:checked');
+    var out=document.getElementById('out');
+    if(!sel){ out.innerHTML='<p class="warn">Choose where the task sits in section 2.</p>'; return; }
+    var claimed=+sel.value;
+    var ok={}; [].forEach.call(cbox.querySelectorAll('input'),function(i){ if(i.checked) ok[+i.getAttribute('data-lvl')]=true; });
+
+    var real=claimed, capped=false, missing=null;
+    for(var n=2;n<=claimed;n++){ if(!ok[n]){ real=n-1; capped=true; missing=n; break; } }
+    var L=LV[real];
+    var next=real<5?LV[real+1]:null;
+    var task=(document.getElementById('task').value||'').trim();
+    var html='<div class="result">'+
+      '<p class="big">Level '+real+'. '+L.t+'</p>'+
+      (task?'<p style="margin:.1rem 0 .6rem;color:var(--muted)">Task: '+task.replace(/[<>&]/g,'')+'</p>':'');
+    if(capped){
+      var why={2:'there are no success criteria, so this is not validation yet',3:'there is no assembled process, so this is not orchestration yet',4:'there is no ownership of the outcome, so this is not outcome ownership yet',5:'the solution cannot be repeated without you, so it is not a system yet'}[missing];
+      html+='<div class="warn">You selected level '+claimed+', but '+why+'. Your supported level is '+real+'. This is not nitpicking. The market pays for a level you can prove, not one you claim.</div>';
+    }
+    var nextMoveText;
+    if(next){
+      nextMoveText=nextMove(real);
+      html+='<p style="margin:.8rem 0 .2rem"><b>Move up one level → level '+next.n+'. '+next.t+':</b></p>'+
+        '<p style="margin:.1rem 0">'+nextMoveText+'</p>'+
+        '<p style="margin:.9rem 0 0;font-size:.88rem;color:var(--muted)">Next, use the "One move up one level" plan in the Practicum worksheets.</p>';
+    } else {
+      nextMoveText='This is the highest level. The useful move now is to repeat the system across more tasks and people.';
+      html+='<p style="margin:.8rem 0 0">'+nextMoveText+'</p>';
+    }
+    html+='<button class="btn" id="saveProfile" style="margin-top:1rem">💾 Save to My Profile</button>'+
+      '<p class="profile-note">Saved only in this browser. Nothing is sent anywhere. <a href="../my-profile/tool.html">My Profile →</a></p>';
+    html+='</div>';
+    out.innerHTML=html;
+    document.getElementById('saveProfile').onclick=function(){
+      var score='Level '+real+'. '+L.t;
+      var ok=saveToProfile('usefulness-level-check','My usefulness level',score,nextMoveText);
+      this.textContent = ok ? '✓ Saved' : 'Could not save (private mode?)';
+      if(ok) this.disabled = true;
+    };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  function nextMove(cur){
+    return [
+      'Stop forwarding the model answer as it is. Use AI for speed, then check the result against facts.',
+      'Write success criteria for this task and use them to review your work.',
+      'Build a process around the task. Decide what the agent does, which data it uses, and who reviews the result.',
+      'Take ownership of the outcome. Agree which metric, customer result, or risk you own.',
+      'Package the solution so another person can repeat it without you: a template, checklist, or skill.'
+    ][cur];
+  }
+})();
+</script>
+</body>
+</html>
